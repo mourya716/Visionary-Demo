@@ -3,467 +3,458 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VISIONARIES | End-to-End Medical AI</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Visionaries | Medical AI Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --neon-green: #0aff0a;
-            --neon-red: #ff003c;
-            --bg-dark: #050a10;
-            --glass: rgba(16, 32, 48, 0.9);
-            --border: 1px solid rgba(0, 243, 255, 0.3);
+            --primary: #0284c7;   /* Professional Medical Blue */
+            --primary-dark: #0369a1;
+            --bg-page: #f1f5f9;
+            --bg-panel: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --alert: #ef4444;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--neon-blue);
+            background-color: var(--bg-page);
+            color: var(--text-main);
             height: 100vh;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-            background: radial-gradient(circle at center, #0a1520 0%, #000000 100%);
         }
 
-        /* --- TOP HUD --- */
+        /* --- HEADER --- */
         header {
-            padding: 15px 30px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--neon-blue);
-            background: rgba(0,0,0,0.8);
-            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        .brand h1 { font-size: 1.8rem; letter-spacing: 4px; text-transform: uppercase; }
-        .brand span { color: var(--neon-green); font-size: 0.8rem; }
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand h1 { font-size: 1.25rem; font-weight: 700; color: var(--primary-dark); letter-spacing: -0.5px; }
+        .tagline { font-size: 0.8rem; color: var(--text-light); background: #e0f2fe; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         
-        .mode-toggle {
-            display: flex;
-            gap: 10px;
-        }
+        .status-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .server-status { font-size: 0.8rem; color: var(--text-light); font-weight: 500; }
 
-        .mode-btn {
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 8px 20px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        
-        .mode-btn:hover, .mode-btn.active {
-            background: var(--neon-blue);
-            color: black;
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        /* --- MAIN GRID --- */
-        .grid-container {
+        /* --- MAIN LAYOUT --- */
+        main {
+            flex: 1;
             display: grid;
-            grid-template-columns: 1fr 1.2fr 1fr;
-            height: calc(100vh - 70px);
-            gap: 2px;
-            background: rgba(0, 243, 255, 0.1);
+            grid-template-columns: 320px 1fr 350px; /* Patient | Chat | Doctor */
+            gap: 1px; /* Borders created by gap */
+            background: var(--border); /* Grid line color */
+            overflow: hidden;
         }
 
         .panel {
-            background: var(--bg-dark);
-            padding: 20px;
-            border-right: var(--border);
+            background: var(--bg-panel);
             display: flex;
             flex-direction: column;
-            position: relative;
+            overflow: hidden;
         }
 
         .panel-header {
-            font-size: 1.2rem;
-            color: var(--neon-green);
-            margin-bottom: 20px;
-            border-bottom: 1px dashed #333;
-            padding-bottom: 10px;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            background: #f8fafc;
+        }
+
+        .panel-body {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
         /* --- LEFT: PATIENT --- */
-        .patient-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 2px solid var(--neon-blue);
-            margin: 0 auto 20px;
+        .mic-wrapper {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            background: rgba(0, 243, 255, 0.1);
-        }
-
-        .live-transcript {
-            flex: 1;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid #333;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            color: #ccc;
-            overflow-y: auto;
-            margin-bottom: 20px;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
         }
 
         .mic-btn {
-            width: 100%;
-            padding: 15px;
-            background: var(--neon-blue);
-            border: none;
-            color: black;
-            font-weight: bold;
-            font-size: 1.1rem;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            border: 1px solid var(--border);
+            box-shadow: 5px 5px 10px #e2e8f0, -5px -5px 10px #ffffff;
             cursor: pointer;
-            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
             transition: 0.2s;
         }
-        .mic-btn:hover { filter: brightness(1.2); }
-        .mic-btn.recording { background: var(--neon-red); animation: pulse 1s infinite; color: white; }
 
-        /* --- CENTER: AI CORE --- */
-        .ai-core {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+        .mic-btn:active { box-shadow: inset 5px 5px 10px #e2e8f0, inset -5px -5px 10px #ffffff; }
+        .mic-btn.active { background: var(--alert); color: white; border-color: var(--alert); animation: pulse 1.5s infinite; }
+
+        .lang-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-top: 5px;
+            background: #fff;
         }
 
-        .brain-loader {
-            width: 150px;
-            height: 150px;
-            border: 5px solid rgba(0, 243, 255, 0.2);
-            border-top: 5px solid var(--neon-blue);
-            border-radius: 50%;
-            animation: spin 2s linear infinite;
-            margin-bottom: 30px;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+        .transcript-log {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            min-height: 100px;
         }
 
-        .translation-box {
-            width: 90%;
-            background: rgba(16, 32, 48, 0.9);
-            border: 1px solid var(--neon-green);
+        /* --- CENTER: CHAT --- */
+        .chat-area {
+            background: #f1f5f9; /* Contrast background */
             padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
         }
 
-        .diagnosis-tag {
-            background: var(--neon-red);
-            color: white;
-            padding: 5px 15px;
-            font-weight: bold;
-            display: none; /* Hidden until triggered */
-            animation: blink 1s infinite;
+        .msg-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
         }
+
+        .msg-patient {
+            align-self: flex-start;
+            background: white;
+            border-bottom-left-radius: 2px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .msg-doctor {
+            align-self: flex-end;
+            background: #e0f2fe; /* Light Blue */
+            border-bottom-right-radius: 2px;
+            border-right: 4px solid var(--success);
+        }
+
+        .msg-meta { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .trans-text { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.05); color: var(--primary-dark); font-weight: 500; font-size: 0.95rem; }
 
         /* --- RIGHT: DOCTOR --- */
-        .rx-pad {
-            flex: 1;
+        .diagnosis-card {
             background: #fff;
-            color: #000;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 15px;
-            font-family: 'Courier New', monospace;
-            margin-bottom: 20px;
-            border-top: 5px solid var(--neon-blue);
+            border-left: 4px solid var(--alert);
         }
+        
+        .diagnosis-label { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; font-weight: 700; }
+        .diagnosis-val { font-size: 1.1rem; font-weight: 600; color: var(--text-main); margin-top: 4px; }
 
-        .rx-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 2px solid #000;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 70%;
-            border: none;
-            resize: none;
-            font-size: 1.1rem;
-            background: transparent;
-            outline: none;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .doc-btn {
-            background: transparent;
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
+        .rx-box {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 10px;
+            font-family: monospace;
+            resize: none;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .rx-box:focus { border-color: var(--primary); }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .doc-btn:hover { background: var(--neon-green); color: black; }
 
-        /* --- REPORT OVERLAY (THE "SHOCK" ELEMENT) --- */
-        .report-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 200;
+        .btn-speak { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border); margin-bottom: 10px; }
+        .btn-speak:hover { background: #e2e8f0; }
+        
+        .btn-send { background: var(--primary); color: white; }
+        .btn-send:hover { background: var(--primary-dark); }
+
+        /* --- REPORT MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
             display: none;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(2px);
         }
 
-        .digital-report {
+        .report-paper {
             background: white;
             width: 500px;
-            height: 700px;
-            color: black;
             padding: 40px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.3s ease-out;
             position: relative;
-            box-shadow: 0 0 50px var(--neon-blue);
-            animation: slideUp 0.5s ease-out;
-            display: flex;
-            flex-direction: column;
         }
 
-        .report-header {
-            border-bottom: 3px solid var(--neon-blue);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .report-header { border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .report-logo h2 { font-size: 1.4rem; color: #000; letter-spacing: -1px; }
+        
+        .report-row { margin-bottom: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .rx-area { background: #f8fafc; padding: 15px; border-left: 3px solid var(--primary); margin: 20px 0; font-family: monospace; }
+        
+        .close-icon { position: absolute; top: 10px; right: 15px; cursor: pointer; color: #999; font-size: 1.2rem; }
 
-        .report-body { flex: 1; }
-        .report-row { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .report-label { font-weight: bold; color: #555; font-size: 0.8rem; text-transform: uppercase; }
-        .report-val { font-size: 1.2rem; font-weight: 600; }
-
-        .report-footer {
-            margin-top: auto;
-            text-align: center;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
-        }
-
-        .close-btn {
-            position: absolute; top: 10px; right: 20px;
-            background: red; color: white; border: none; padding: 5px 10px; cursor: pointer;
-        }
-
-        /* Animations */
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
 <body>
 
-    <div class="report-overlay" id="reportModal">
-        <div class="digital-report">
-            <button class="close-btn" onclick="closeReport()">X</button>
+    <div class="modal-overlay" id="reportModal">
+        <div class="report-paper">
+            <span class="close-icon" onclick="toggleReport(false)">&times;</span>
             <div class="report-header">
-                <div>
-                    <h1 style="color: #005f73;">VISIONARIES</h1>
-                    <p>AI Medical Diagnosis System</p>
+                <div class="report-logo">
+                    <h2>VISIONARIES</h2>
+                    <span style="font-size: 0.8rem; color: #666;">Medical Diagnosis System</span>
                 </div>
-                <i class="fas fa-heartbeat" style="font-size: 2rem; color: #ee9b00;"></i>
-            </div>
-
-            <div class="report-body">
-                <div class="report-row">
-                    <div class="report-label">Patient ID</div>
-                    <div class="report-val">#VSN-2026-8892</div>
-                </div>
-                <div class="report-row">
-                    <div class="report-label">Detected Language</div>
-                    <div class="report-val" id="repLang">Santali (Tribal)</div>
-                </div>
-                <div class="report-row">
-                    <div class="report-label">Symptoms</div>
-                    <div class="report-val" id="repSym">High Fever, Headache</div>
-                </div>
-                <div class="report-row">
-                    <div class="report-label">AI Diagnosis</div>
-                    <div class="report-val" id="repDiag" style="color: #d90429;">Viral Fever</div>
-                </div>
-                
-                <div style="background: #f0f9ff; padding: 15px; border-left: 4px solid #005f73; margin-top: 20px;">
-                    <div class="report-label">Prescription (Rx)</div>
-                    <p id="repRx" style="font-family: 'Courier New'; font-size: 1.1rem; margin-top: 5px;">
-                        -- No Data --
-                    </p>
+                <div style="text-align: right;">
+                    <strong>Rx Report</strong><br>
+                    <small id="reportDate">2026-02-08</small>
                 </div>
             </div>
+            
+            <div class="report-row">
+                <span><strong>Patient ID:</strong> #8892-A</span>
+                <span><strong>Language:</strong> <span id="repLang">Santali</span></span>
+            </div>
+            <div class="report-row">
+                <span><strong>Diagnosis:</strong></span>
+                <span id="repDiag" style="color: #d90429; font-weight: bold;">--</span>
+            </div>
 
-            <div class="report-footer">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=VisionariesProject" alt="QR">
-                <p style="font-size: 0.7rem; color: #888; margin-top: 10px;">Scan to download Digital Health Record<br>Generated by Team Visionaries</p>
+            <p style="font-size: 0.9rem; font-weight: bold; margin-top: 20px;">Prescription / Advice:</p>
+            <div class="rx-area" id="repContent">
+                -- No Content --
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=VisionariesRx" style="width: 80px; opacity: 0.8;">
+                <p style="font-size: 0.7rem; color: #999; margin-top: 10px;">Scan to download to Patient App</p>
             </div>
         </div>
     </div>
 
     <header>
         <div class="brand">
-            <h1>Visionaries <span>[PRO-MED v2.0]</span></h1>
+            <i class="fas fa-heartbeat" style="color: var(--primary);"></i>
+            <h1>AI-MedAssist</h1>
+            <span class="tagline">Visionaries Prototype</span>
         </div>
-        <div class="mode-toggle">
-            <button class="mode-btn active" id="statusIndicator">SYSTEM ONLINE</button>
+        <div class="server-status">
+            <span class="status-dot"></span> System Connected
         </div>
     </header>
 
-    <div class="grid-container">
-        
+    <main>
         <aside class="panel">
-            <div class="panel-header"><i class="fas fa-user"></i> PATIENT INPUT</div>
-            
-            <div class="patient-avatar">
-                <i class="fas fa-user-injured"></i>
+            <div class="panel-header">
+                <i class="fas fa-user-injured" style="color: var(--primary);"></i> Patient Interface
             </div>
+            <div class="panel-body" style="align-items: center; text-align: center;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; width: 100%; text-align: left;">Input Language</label>
+                <select class="lang-select" id="patientLang">
+                    <option value="Santali">Santali (Tribal)</option>
+                    <option value="Bodo">Bodo (Tribal)</option>
+                    <option value="Hindi">Hindi (Rural)</option>
+                </select>
 
-            <div class="live-transcript" id="transcriptBox">
-                [Waiting for speech input...]
-            </div>
+                <div class="mic-wrapper">
+                    <button class="mic-btn" id="micBtn" onclick="runPatientDemo()">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <span style="font-size: 0.8rem; margin-top: 10px; color: #94a3b8;" id="micStatus">Tap to Speak</span>
+                </div>
 
-            <div style="margin-top: auto;">
-                <button class="mic-btn" id="micBtn" onclick="startSimulation()">
-                    <i class="fas fa-microphone"></i> ACTIVATE MIC (DEMO)
-                </button>
+                <div style="width: 100%; text-align: left;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Live Transcript</label>
+                    <div class="transcript-log" id="liveTranscript">
+                        Waiting for input...
+                    </div>
+                </div>
             </div>
         </aside>
 
-        <section class="panel ai-core">
-            <div class="brain-loader"></div>
-            
-            <h2 style="color: var(--neon-blue); margin-bottom: 10px;">NEURAL TRANSLATOR</h2>
-            
-            <div class="translation-box">
-                <p style="font-size: 0.8rem; color: #888;">DETECTED:</p>
-                <h3 id="nativeText" style="color: white; font-style: italic;">"..."</h3>
-                <div style="height: 1px; background: #333; margin: 10px 0;"></div>
-                <p style="font-size: 0.8rem; color: #888;">TRANSLATED (HINDI/ENG):</p>
-                <h3 id="translatedText" style="color: var(--neon-green);">--</h3>
-            </div>
-
-            <div id="aiWarning" class="diagnosis-tag">
-                ⚠️ POSSIBLE INFECTION DETECTED
+        <section class="panel chat-area" id="chatContainer">
+            <div class="msg-bubble msg-doctor">
+                <span class="msg-meta">System</span>
+                Namaste. Please describe your symptoms clearly.
             </div>
         </section>
 
         <aside class="panel">
-            <div class="panel-header"><i class="fas fa-user-md"></i> DOCTOR CONSOLE</div>
-
-            <div class="rx-pad">
-                <div class="rx-header">
-                    <span>Rx PRECRIPTION</span>
-                    <span>DATE: 2026-02-08</span>
-                </div>
-                <textarea id="doctorNotes" placeholder="> AI Auto-Fill Enabled...&#10;> Listening to diagnosis..."></textarea>
+            <div class="panel-header">
+                <i class="fas fa-user-md" style="color: var(--success);"></i> Doctor Console
             </div>
+            <div class="panel-body">
+                <div class="diagnosis-card">
+                    <div class="diagnosis-label">AI Detected Symptom</div>
+                    <div class="diagnosis-val" id="aiSymptom">--</div>
+                    <div class="diagnosis-label" style="margin-top: 10px;">Probable Condition</div>
+                    <div class="diagnosis-val" id="aiCondition" style="color: var(--primary);">--</div>
+                </div>
 
-            <div class="action-grid">
-                <button class="doc-btn" onclick="speakToPatient()">
-                    <i class="fas fa-volume-up"></i> SPEAK (TTS)
-                </button>
-                <button class="doc-btn" onclick="generateReport()" style="border-color: var(--neon-blue); color: var(--neon-blue);">
-                    <i class="fas fa-file-medical"></i> SEND REPORT
-                </button>
+                <div style="display: flex; flex-direction: column; flex: 1; gap: 5px;">
+                    <label class="diagnosis-label">Doctor Notes / Rx</label>
+                    <textarea class="rx-box" id="rxInput" placeholder="Type prescription here..."></textarea>
+                </div>
+
+                <div style="margin-top: auto;">
+                    <button class="action-btn btn-speak" onclick="doctorReply()">
+                        <i class="fas fa-volume-up"></i> Speak Reply (Translate)
+                    </button>
+                    <button class="action-btn btn-send" onclick="toggleReport(true)">
+                        <i class="fas fa-paper-plane"></i> Send Report
+                    </button>
+                </div>
             </div>
         </aside>
-    </div>
+    </main>
 
     <script>
-        // --- SIMULATION DATA ---
-        // This simulates the complex backend logic for the demo
+        // --- LOGIC ENGINE ---
+        // Simulating the backend AI for the demo
         const demoData = {
-            native: "Ruaa aakade, bohok hasuch (Santali)",
-            translated: "Mujhe tez bukhar aur sir dard hai. (I have high fever and headache.)",
-            symptoms: "High Fever, Migraine",
-            diagnosis: "Viral Pyrexia",
-            autoRx: "1. Paracetamol 650mg (SOS)\n2. Drink plenty of water\n3. Rest for 2 days."
+            symptom: "Severe Stomach Pain",
+            condition: "Acute Gastritis",
+            nativeAudio: "Morom re dukha ache...",
+            translated: "Mujhe pet mein bohot dard ho raha hai. (I have severe stomach pain.)",
+            aiRx: "1. Antacid Syrup (10ml after food)\n2. Tab. Pantoprazole 40mg (Empty Stomach)\n3. Avoid spicy food for 3 days."
         };
 
-        // --- FUNCTIONS ---
+        let step = 0;
 
-        function startSimulation() {
+        // 1. Patient Speaks Logic
+        function runPatientDemo() {
             const micBtn = document.getElementById('micBtn');
-            const transBox = document.getElementById('transcriptBox');
-            const nativeDisp = document.getElementById('nativeText');
-            const transDisp = document.getElementById('translatedText');
-            const warning = document.getElementById('aiWarning');
-            const docNotes = document.getElementById('doctorNotes');
+            const status = document.getElementById('micStatus');
+            const log = document.getElementById('liveTranscript');
 
-            // 1. Activate Visuals
-            micBtn.classList.add('recording');
-            micBtn.innerHTML = "LISTENING...";
-            transBox.innerHTML = "Analyzing audio waveforms...";
+            if(step > 0) return; // Prevent double click for demo
 
-            // 2. Simulate Delay (Processing)
+            // Visuals: Active State
+            micBtn.classList.add('active');
+            status.innerText = "Listening...";
+            log.innerText = "Processing audio stream...";
+
+            // Delay to simulate processing time
             setTimeout(() => {
-                transBox.innerHTML = "Detecting Language: SANTALI (Confidence: 98%)\nExtracting Bio-Markers...";
-            }, 1500);
+                micBtn.classList.remove('active');
+                status.innerText = "Processing...";
+                
+                // Update Log
+                log.innerText = `Detected: "${demoData.nativeAudio}"`;
 
-            // 3. Reveal Results
-            setTimeout(() => {
-                micBtn.classList.remove('recording');
-                micBtn.innerHTML = "MIC INACTIVE";
-                
-                nativeDisp.innerText = `"${demoData.native}"`;
-                transDisp.innerText = demoData.translated;
-                
-                // Show Warning
-                warning.style.display = "block";
-                
-                // Auto-fill Doctor's Notes (AI Suggestion)
-                docNotes.value = `[AI SUGGESTION]\nDx: ${demoData.diagnosis}\n\nRx:\n${demoData.autoRx}`;
-                
-                // Synthesize Voice (Simulate Translation to Doctor)
-                speak(demoData.translated);
+                // Add to Chat
+                addChatBubble(demoData.nativeAudio, demoData.translated, 'patient');
 
-            }, 3500);
+                // Update AI Doctor Panel
+                updateDoctorPanel();
+                step = 1;
+                status.innerText = "Tap to Speak";
+            }, 2000);
         }
 
-        function generateReport() {
-            // Populate Modal
-            document.getElementById('repSym').innerText = demoData.symptoms;
-            document.getElementById('repDiag').innerText = demoData.diagnosis;
-            document.getElementById('repRx').innerText = document.getElementById('doctorNotes').value;
+        // 2. Doctor Reply Logic
+        function doctorReply() {
+            if(step === 0) {
+                alert("Please wait for patient input first.");
+                return;
+            }
+
+            const reply = "Okay, I understand. I am sending you a prescription for Gastritis. Please take rest.";
+            const translatedReply = "Thik hai. Main dawai likh raha hoon. Aaram karein.";
+
+            addChatBubble(reply, translatedReply, 'doctor');
+        }
+
+        // 3. Helper: Update Doctor AI Panel
+        function updateDoctorPanel() {
+            document.getElementById('aiSymptom').innerText = demoData.symptom;
+            document.getElementById('aiCondition').innerText = demoData.condition;
             
-            // Show Overlay
-            document.getElementById('reportModal').style.display = "flex";
+            // Auto-fill Rx for convenience (simulating AI Assist)
+            const rxBox = document.getElementById('rxInput');
+            rxBox.value = "[AI Auto-Fill]\n" + demoData.aiRx;
         }
 
-        function closeReport() {
-            document.getElementById('reportModal').style.display = "none";
+        // 4. Helper: Chat Bubble
+        function addChatBubble(native, trans, role) {
+            const chat = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            
+            div.className = `msg-bubble ${role === 'patient' ? 'msg-patient' : 'msg-doctor'}`;
+            div.innerHTML = `
+                <span class="msg-meta">${role === 'patient' ? 'Patient (Santali)' : 'Doctor (English)'}</span>
+                ${native}
+                <div class="trans-text">
+                    <i class="fas fa-language"></i> ${trans}
+                </div>
+            `;
+            
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
         }
 
-        function speakToPatient() {
-            // Simulate Doctor speaking back in Tribal Language
-            alert("System: Translating Doctor's voice to Santali and broadcasting...");
-            speak("System message. Prescription sent to patient device.");
-        }
-
-        function speak(text) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                window.speechSynthesis.speak(utterance);
+        // 5. Report Modal Logic
+        function toggleReport(show) {
+            const modal = document.getElementById('reportModal');
+            if(show) {
+                // Populate Data
+                document.getElementById('repDiag').innerText = document.getElementById('aiCondition').innerText;
+                document.getElementById('repContent').innerText = document.getElementById('rxInput').value;
+                document.getElementById('repLang').innerText = document.getElementById('patientLang').value;
+                
+                // Show
+                modal.style.display = 'flex';
+            } else {
+                modal.style.display = 'none';
             }
         }
     </script>
