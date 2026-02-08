@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visionaries AI | Advanced Medical Translator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+        }
+
+        .logo-section h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+        .logo-section p { font-size: 0.85rem; opacity: 0.9; font-weight: 300; }
+        .live-indicator {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(4px);
+        }
+        .pulse { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 2s infinite; }
+
+        /* --- Main Layout --- */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 350px 1fr 350px; /* Patient | Interaction | Doctor */
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* --- Panels --- */
+        .panel {
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .panel-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow-y: auto;
+        }
+
+        /* --- Center Chat Area --- */
+        .chat-area {
+            background: #fff;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        .message-bubble {
+            max-width: 85%;
+            padding: 1rem 1.25rem;
+            border-radius: 1rem;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+            line-height: 1.6;
+        }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .bubble-patient {
+            align-self: flex-start;
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            color: var(--text-main);
+            border-bottom-left-radius: 2px;
+        }
+
+        .bubble-doctor {
+            align-self: flex-end;
+            background: #f0fdf4;
+            border-right: 4px solid var(--success);
+            color: var(--text-main);
+            border-bottom-right-radius: 2px;
+        }
+
+        .bubble-meta {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            color: var(--text-sub);
+        }
+
+        .translated-text {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* --- Microphone Button --- */
+        .mic-container {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.9);
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .main-mic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1.75rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .main-mic:hover { transform: scale(1.1); }
+        .main-mic:active { transform: scale(0.95); }
+        
+        .main-mic.listening::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            top: -2px; left: -2px;
+            animation: ripple 1.5s infinite;
+        }
+
+        /* --- Info Cards --- */
+        .info-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+        .info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sub); font-weight: 700; margin-bottom: 0.5rem; }
+        .info-value { font-size: 1rem; color: var(--text-main); font-weight: 500; }
+        
+        .symptom-tag {
+            display: inline-block;
+            background: #dbeafe;
+            color: var(--primary-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
+
+        /* --- AI Processor Animation --- */
+        .ai-status {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 0.5rem;
+            height: 20px;
+        }
+
+        @keyframes ripple { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            main { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
+            .panel { height: auto; max-height: 300px; }
+            .chat-area { height: 500px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-section">
+            <h1>AI-MediConnect <span style="font-weight:300; font-size:1.2rem;">| Visionaries</span></h1>
+            <p>Multilingual Medical Diagnosis Aid (Tribal ↔ Hindi ↔ English)</p>
+        </div>
+        <div class="live-indicator">
+            <div class="pulse"></div>
+            System Online
+        </div>
+    </header>
+
+    <main>
+        <section class="panel" style="border-top: 4px solid var(--primary);">
+            <div class="panel-header">
+                <i class="fas fa-user-injured"></i> Patient Details
+            </div>
+            <div class="panel-content">
+                <div class="info-card">
+                    <div class="info-label">Detected Language</div>
+                    <div class="info-value" id="detectedLang">--</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Live Transcription (Native)</div>
+                    <div class="info-value" id="liveTranscript" style="font-style: italic; color: #64748b;">Waiting for speech...</div>
+                </div>
+                
+                <div style="margin-top: auto; padding: 1rem; background: #fffbeb; border-radius: 0.5rem; border: 1px solid #fcd34d;">
+                    <i class="fas fa-lightbulb" style="color: #d97706;"></i> 
+                    <span style="font-size: 0.85rem; color: #92400e;"><b>Demo Hint:</b> Try saying "I have severe stomach pain" or "I have a high fever and headache".</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel chat-area">
+            <div class="panel-header" style="justify-content: center; background: #fff;">
+                <span id="aiStatus" class="ai-status">Ready to assist</span>
+            </div>
+            
+            <div class="messages" id="messageContainer">
+                <div class="message-bubble bubble-doctor">
+                    <span class="bubble-meta">System</span>
+                    Namaste. Please press the microphone button to describe your symptoms.
+                </div>
+            </div>
+
+            <div class="mic-container">
+                <button class="main-mic" id="micButton" onclick="toggleListening()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+        </section>
+
+        <section class="panel" style="border-top: 4px solid var(--success);">
+            <div class="panel-header">
+                <i class="fas fa-user-md"></i> AI Diagnosis Aid
+            </div>
+            <div class="panel-content">
+                <div class="info-card">
+                    <div class="info-label">Identified Symptoms</div>
+                    <div id="symptomsList">--</div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-label">Potential Diagnosis</div>
+                    <div class="info-value" id="diagnosisOutput">--</div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-label">Severity Assessment</div>
+                    <div class="info-value" id="severityOutput">--</div>
+                </div>
+                
+                <div style="margin-top: auto; text-align: center; font-size: 0.8rem; color: #94a3b8;">
+                    <i class="fas fa-shield-alt"></i> PII Data Filter Active
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- Configuration & State ---
+        let isListening = false;
+        let recognition;
+        const synth = window.speechSynthesis;
+
+        // --- Demo Logic Engine (Simulates the Server-Side Translation) ---
+        // Maps keywords to specific Bodo/Santali outputs mentioned in your PDF
+        const medicalLogic = {
+            "pain": {
+                native: "Morom re dukha ache (Santali)",
+                hindi: "Mujhe pet mein dard hai",
+                diagnosis: "Gastritis / Abdominal Issue",
+                severity: "Moderate",
+                symptom: "Stomach Pain"
+            },
+            "stomach": {
+                native: "Morom re dukha ache (Santali)",
+                hindi: "Mujhe pet mein dard hai",
+                diagnosis: "Gastritis / Ulcer",
+                severity: "Moderate",
+                symptom: "Abdominal Discomfort"
+            },
+            "fever": {
+                native: "Ruaa aakade (Santali)",
+                hindi: "Mujhe tez bukhar hai",
+                diagnosis: "Viral Infection",
+                severity: "High",
+                symptom: "High Temperature"
+            },
+            "head": {
+                native: "Bohok hasuch (Santali)",
+                hindi: "Mera sir dard kar raha hai",
+                diagnosis: "Migraine / Tension",
+                severity: "Mild",
+                symptom: "Headache"
+            },
+            "default": {
+                native: "[Speech in Tribal Language]",
+                hindi: "Bataiye, aapko kya takleef hai?",
+                diagnosis: "Pending Analysis...",
+                severity: "Unknown",
+                symptom: "Unclear"
+            }
+        };
+
+        // --- Initialize Speech Recognition ---
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-IN'; // Using English to capture demo commands easily
+
+            recognition.onstart = () => {
+                isListening = true;
+                updateMicState(true);
+                document.getElementById('aiStatus').innerText = "Listening to patient...";
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                updateMicState(false);
+                document.getElementById('aiStatus').innerText = "Processing audio...";
+            };
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        processSpeech(event.results[i][0].transcript);
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                        document.getElementById('liveTranscript').innerText = interimTranscript;
+                    }
+                }
+            };
+        } else {
+            alert("Please use Google Chrome for full voice features.");
+        }
+
+        // --- Core Functions ---
+
+        function toggleListening() {
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+
+        function updateMicState(active) {
+            const btn = document.getElementById('micButton');
+            if (active) {
+                btn.classList.add('listening');
+                btn.innerHTML = '<i class="fas fa-stop"></i>';
+            } else {
+                btn.classList.remove('listening');
+                btn.innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        }
+
+        function processSpeech(transcript) {
+            const inputLower = transcript.toLowerCase();
+            document.getElementById('liveTranscript').innerText = transcript;
+            
+            // 1. Analyze for Keywords
+            let match = medicalLogic.default;
+            if (inputLower.includes('pain') || inputLower.includes('stomach') || inputLower.includes('hurt')) match = medicalLogic.stomach;
+            else if (inputLower.includes('fever') || inputLower.includes('hot')) match = medicalLogic.fever;
+            else if (inputLower.includes('head')) match = medicalLogic.head;
+
+            // 2. Update UI with delays to simulate AI processing
+            document.getElementById('aiStatus').innerText = "Translating & Analyzing...";
+            
+            // Step A: Patient Bubble (Native)
+            setTimeout(() => {
+                addMessage(match.native, match.hindi, 'patient');
+                document.getElementById('detectedLang').innerText = "Santali / Bodo";
+                speakText(match.hindi); // Computer speaks the translation
+            }, 500);
+
+            // Step B: Update Medical Dashboard
+            setTimeout(() => {
+                updateMedicalDash(match);
+                document.getElementById('aiStatus').innerText = "Ready for next input";
+            }, 1000);
+        }
+
+        function addMessage(mainText, subText, type) {
+            const container = document.getElementById('messageContainer');
+            const div = document.createElement('div');
+            div.className = `message-bubble ${type === 'patient' ? 'bubble-patient' : 'bubble-doctor'}`;
+            
+            div.innerHTML = `
+                <span class="bubble-meta">${type === 'patient' ? 'Patient (Native)' : 'Doctor (Hindi)'}</span>
+                ${mainText}
+                <div class="translated-text">
+                    <i class="fas fa-language"></i> Translated: "${subText}"
+                </div>
+            `;
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateMedicalDash(data) {
+            // Symptoms
+            const symList = document.getElementById('symptomsList');
+            symList.innerHTML = `<span class="symptom-tag">${data.symptom}</span>`;
+            
+            // Diagnosis
+            document.getElementById('diagnosisOutput').innerText = data.diagnosis;
+            
+            // Severity
+            const sevEl = document.getElementById('severityOutput');
+            sevEl.innerText = data.severity;
+            
+            // Color coding severity
+            if(data.severity === 'High') sevEl.style.color = 'var(--danger)';
+            else if(data.severity === 'Moderate') sevEl.style.color = 'var(--accent)';
+            else sevEl.style.color = 'var(--success)';
+        }
+
+        function speakText(text) {
+            if (synth.speaking) {
+                console.error('speechSynthesis.speaking');
+                return;
+            }
+            if (text !== '') {
+                const utterThis = new SpeechSynthesisUtterance(text);
+                utterThis.lang = 'hi-IN'; // Set to Hindi for authenticity
+                utterThis.rate = 0.9;
+                synth.speak(utterThis);
+            }
+        }
+    </script>
+</body>
+</html>
