@@ -3,458 +3,575 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visionaries | Medical AI Platform</title>
+    <title>Visionaries AI | Advanced Medical Translator</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #0284c7;   /* Professional Medical Blue */
-            --primary-dark: #0369a1;
-            --bg-page: #f1f5f9;
-            --bg-panel: #ffffff;
-            --text-main: #334155;
-            --text-light: #64748b;
-            --border: #e2e8f0;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
             --success: #10b981;
-            --alert: #ef4444;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 
         body {
-            background-color: var(--bg-page);
-            color: var(--text-main);
+            background-color: var(--bg);
             height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
-        /* --- HEADER --- */
+        /* --- Header --- */
         header {
-            background: #ffffff;
-            border-bottom: 1px solid var(--border);
-            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 50;
         }
 
-        .brand { display: flex; align-items: center; gap: 10px; }
-        .brand h1 { font-size: 1.25rem; font-weight: 700; color: var(--primary-dark); letter-spacing: -0.5px; }
-        .tagline { font-size: 0.8rem; color: var(--text-light); background: #e0f2fe; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-        
-        .status-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; margin-right: 5px; }
-        .server-status { font-size: 0.8rem; color: var(--text-light); font-weight: 500; }
+        .logo-section h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+        .logo-section p { font-size: 0.85rem; opacity: 0.9; font-weight: 300; }
+        .live-indicator {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(4px);
+        }
+        .pulse { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 2s infinite; }
 
-        /* --- MAIN LAYOUT --- */
+        /* --- Main Layout --- */
         main {
             flex: 1;
             display: grid;
-            grid-template-columns: 320px 1fr 350px; /* Patient | Chat | Doctor */
-            gap: 1px; /* Borders created by gap */
-            background: var(--border); /* Grid line color */
-            overflow: hidden;
+            grid-template-columns: 350px 1fr 350px; /* Patient | Interaction | Doctor */
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
         }
 
+        /* --- Panels --- */
         .panel {
-            background: var(--bg-panel);
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
         }
 
         .panel-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
+            padding: 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
             font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: #f8fafc;
+            gap: 0.5rem;
+            color: var(--text-main);
         }
 
-        .panel-body {
+        .panel-content {
+            flex: 1;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow-y: auto;
+        }
+
+        /* --- Center Chat Area --- */
+        .chat-area {
+            background: #fff;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .messages {
             flex: 1;
             padding: 1.5rem;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            scroll-behavior: smooth;
         }
 
-        /* --- LEFT: PATIENT --- */
-        .mic-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .mic-btn {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #ffffff, #f1f5f9);
-            border: 1px solid var(--border);
-            box-shadow: 5px 5px 10px #e2e8f0, -5px -5px 10px #ffffff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: 0.2s;
-        }
-
-        .mic-btn:active { box-shadow: inset 5px 5px 10px #e2e8f0, inset -5px -5px 10px #ffffff; }
-        .mic-btn.active { background: var(--alert); color: white; border-color: var(--alert); animation: pulse 1.5s infinite; }
-
-        .lang-select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            margin-top: 5px;
-            background: #fff;
-        }
-
-        .transcript-log {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            font-style: italic;
-            background: #f8fafc;
-            padding: 10px;
-            border-radius: 8px;
-            min-height: 100px;
-        }
-
-        /* --- CENTER: CHAT --- */
-        .chat-area {
-            background: #f1f5f9; /* Contrast background */
-            padding: 20px;
-        }
-
-        .msg-bubble {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 12px;
+        .message-bubble {
+            max-width: 85%;
+            padding: 1rem 1.25rem;
+            border-radius: 1rem;
             position: relative;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease;
+            animation: slideIn 0.3s ease-out;
+            line-height: 1.6;
         }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .msg-patient {
+        .bubble-patient {
             align-self: flex-start;
-            background: white;
-            border-bottom-left-radius: 2px;
+            background: #eff6ff;
             border-left: 4px solid var(--primary);
+            color: var(--text-main);
+            border-bottom-left-radius: 2px;
         }
 
-        .msg-doctor {
+        .bubble-doctor {
             align-self: flex-end;
-            background: #e0f2fe; /* Light Blue */
-            border-bottom-right-radius: 2px;
+            background: #f0fdf4;
             border-right: 4px solid var(--success);
+            color: var(--text-main);
+            border-bottom-right-radius: 2px;
         }
 
-        .msg-meta { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block; }
-        .trans-text { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.05); color: var(--primary-dark); font-weight: 500; font-size: 0.95rem; }
-
-        /* --- RIGHT: DOCTOR --- */
-        .diagnosis-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 15px;
-            border-left: 4px solid var(--alert);
+        .bubble-meta {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            color: var(--text-sub);
         }
-        
-        .diagnosis-label { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; font-weight: 700; }
-        .diagnosis-val { font-size: 1.1rem; font-weight: 600; color: var(--text-main); margin-top: 4px; }
 
-        .rx-box {
-            flex: 1;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px;
-            font-family: monospace;
-            resize: none;
-            outline: none;
-            font-size: 0.9rem;
+        .translated-text {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            color: var(--primary-dark);
+            font-weight: 500;
         }
-        .rx-box:focus { border-color: var(--primary); }
 
-        .action-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
+        /* --- Microphone Button --- */
+        .mic-container {
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 8px;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.9);
+            border-top: 1px solid #f1f5f9;
         }
 
-        .btn-speak { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border); margin-bottom: 10px; }
-        .btn-speak:hover { background: #e2e8f0; }
-        
-        .btn-send { background: var(--primary); color: white; }
-        .btn-send:hover { background: var(--primary-dark); }
-
-        /* --- REPORT MODAL --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 100;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(2px);
-        }
-
-        .report-paper {
-            background: white;
-            width: 500px;
-            padding: 40px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            animation: slideUp 0.3s ease-out;
+        .main-mic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1.75rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
-        .report-header { border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; }
-        .report-logo h2 { font-size: 1.4rem; color: #000; letter-spacing: -1px; }
+        .main-mic:hover { transform: scale(1.1); }
+        .main-mic:active { transform: scale(0.95); }
         
-        .report-row { margin-bottom: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .rx-area { background: #f8fafc; padding: 15px; border-left: 3px solid var(--primary); margin: 20px 0; font-family: monospace; }
+        .main-mic.listening::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            top: -2px; left: -2px;
+            animation: ripple 1.5s infinite;
+        }
+
+        /* --- Info Cards --- */
+        .info-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+        .info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sub); font-weight: 700; margin-bottom: 0.5rem; }
+        .info-value { font-size: 1rem; color: var(--text-main); font-weight: 500; }
         
-        .close-icon { position: absolute; top: 10px; right: 15px; cursor: pointer; color: #999; font-size: 1.2rem; }
+        .symptom-tag {
+            display: inline-block;
+            background: #dbeafe;
+            color: var(--primary-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
 
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- Doctor Input Styles --- */
+        .doctor-input-area {
+            margin-top: auto; /* Pushes to bottom of panel */
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 1rem;
+        }
+        .doc-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: none;
+            height: 80px;
+            margin-bottom: 0.5rem;
+        }
+        .doc-textarea:focus { outline: 2px solid var(--success); border-color: transparent; }
+        
+        .doc-btn-group { display: flex; gap: 0.5rem; }
+        .btn-send { flex: 1; background: var(--success); color: white; border: none; padding: 0.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-send:hover { background: #059669; }
+        .btn-magic { background: #e2e8f0; color: var(--text-main); border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 1.1rem; transition: 0.2s; }
+        .btn-magic:hover { background: #cbd5e1; transform: scale(1.05); }
 
+        /* --- AI Processor Animation --- */
+        .ai-status {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 0.5rem;
+            height: 20px;
+        }
+
+        @keyframes ripple { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            main { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
+            .panel { height: auto; max-height: 300px; }
+            .chat-area { height: 500px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="modal-overlay" id="reportModal">
-        <div class="report-paper">
-            <span class="close-icon" onclick="toggleReport(false)">&times;</span>
-            <div class="report-header">
-                <div class="report-logo">
-                    <h2>VISIONARIES</h2>
-                    <span style="font-size: 0.8rem; color: #666;">Medical Diagnosis System</span>
-                </div>
-                <div style="text-align: right;">
-                    <strong>Rx Report</strong><br>
-                    <small id="reportDate">2026-02-08</small>
-                </div>
-            </div>
-            
-            <div class="report-row">
-                <span><strong>Patient ID:</strong> #8892-A</span>
-                <span><strong>Language:</strong> <span id="repLang">Santali</span></span>
-            </div>
-            <div class="report-row">
-                <span><strong>Diagnosis:</strong></span>
-                <span id="repDiag" style="color: #d90429; font-weight: bold;">--</span>
-            </div>
-
-            <p style="font-size: 0.9rem; font-weight: bold; margin-top: 20px;">Prescription / Advice:</p>
-            <div class="rx-area" id="repContent">
-                -- No Content --
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=VisionariesRx" style="width: 80px; opacity: 0.8;">
-                <p style="font-size: 0.7rem; color: #999; margin-top: 10px;">Scan to download to Patient App</p>
-            </div>
-        </div>
-    </div>
-
     <header>
-        <div class="brand">
-            <i class="fas fa-heartbeat" style="color: var(--primary);"></i>
-            <h1>AI-MedAssist</h1>
-            <span class="tagline">Visionaries Prototype</span>
+        <div class="logo-section">
+            <h1>AI-MediConnect <span style="font-weight:300; font-size:1.2rem;">| Visionaries</span></h1>
+            <p>Multilingual Medical Diagnosis Aid (Tribal ↔ Hindi ↔ English)</p>
         </div>
-        <div class="server-status">
-            <span class="status-dot"></span> System Connected
+        <div class="live-indicator">
+            <div class="pulse"></div>
+            System Online
         </div>
     </header>
 
     <main>
-        <aside class="panel">
+        <section class="panel" style="border-top: 4px solid var(--primary);">
             <div class="panel-header">
-                <i class="fas fa-user-injured" style="color: var(--primary);"></i> Patient Interface
+                <i class="fas fa-user-injured"></i> Patient Details
             </div>
-            <div class="panel-body" style="align-items: center; text-align: center;">
-                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; width: 100%; text-align: left;">Input Language</label>
-                <select class="lang-select" id="patientLang">
-                    <option value="Santali">Santali (Tribal)</option>
-                    <option value="Bodo">Bodo (Tribal)</option>
-                    <option value="Hindi">Hindi (Rural)</option>
-                </select>
-
-                <div class="mic-wrapper">
-                    <button class="mic-btn" id="micBtn" onclick="runPatientDemo()">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                    <span style="font-size: 0.8rem; margin-top: 10px; color: #94a3b8;" id="micStatus">Tap to Speak</span>
+            <div class="panel-content">
+                <div class="info-card">
+                    <div class="info-label">Detected Language</div>
+                    <div class="info-value" id="detectedLang">--</div>
                 </div>
-
-                <div style="width: 100%; text-align: left;">
-                    <label style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Live Transcript</label>
-                    <div class="transcript-log" id="liveTranscript">
-                        Waiting for input...
-                    </div>
+                <div class="info-card">
+                    <div class="info-label">Live Transcription (Native)</div>
+                    <div class="info-value" id="liveTranscript" style="font-style: italic; color: #64748b;">Waiting for speech...</div>
                 </div>
-            </div>
-        </aside>
-
-        <section class="panel chat-area" id="chatContainer">
-            <div class="msg-bubble msg-doctor">
-                <span class="msg-meta">System</span>
-                Namaste. Please describe your symptoms clearly.
+                
+                <div style="margin-top: auto; padding: 1rem; background: #fffbeb; border-radius: 0.5rem; border: 1px solid #fcd34d;">
+                    <i class="fas fa-lightbulb" style="color: #d97706;"></i> 
+                    <span style="font-size: 0.85rem; color: #92400e;"><b>Demo Hint:</b> Try saying "I have severe stomach pain" or "I have a high fever and headache".</span>
+                </div>
             </div>
         </section>
 
-        <aside class="panel">
+        <section class="panel chat-area">
+            <div class="panel-header" style="justify-content: center; background: #fff;">
+                <span id="aiStatus" class="ai-status">Ready to assist</span>
+            </div>
+            
+            <div class="messages" id="messageContainer">
+                <div class="message-bubble bubble-doctor">
+                    <span class="bubble-meta">System</span>
+                    Namaste. Please press the microphone button to describe your symptoms.
+                </div>
+            </div>
+
+            <div class="mic-container">
+                <button class="main-mic" id="micButton" onclick="toggleListening()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+        </section>
+
+        <section class="panel" style="border-top: 4px solid var(--success);">
             <div class="panel-header">
-                <i class="fas fa-user-md" style="color: var(--success);"></i> Doctor Console
+                <i class="fas fa-user-md"></i> AI Diagnosis Aid & Response
             </div>
-            <div class="panel-body">
-                <div class="diagnosis-card">
-                    <div class="diagnosis-label">AI Detected Symptom</div>
-                    <div class="diagnosis-val" id="aiSymptom">--</div>
-                    <div class="diagnosis-label" style="margin-top: 10px;">Probable Condition</div>
-                    <div class="diagnosis-val" id="aiCondition" style="color: var(--primary);">--</div>
+            <div class="panel-content">
+                <div class="info-card">
+                    <div class="info-label">Identified Symptoms</div>
+                    <div id="symptomsList">--</div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; flex: 1; gap: 5px;">
-                    <label class="diagnosis-label">Doctor Notes / Rx</label>
-                    <textarea class="rx-box" id="rxInput" placeholder="Type prescription here..."></textarea>
+                <div class="info-card">
+                    <div class="info-label">Potential Diagnosis</div>
+                    <div class="info-value" id="diagnosisOutput">--</div>
                 </div>
 
-                <div style="margin-top: auto;">
-                    <button class="action-btn btn-speak" onclick="doctorReply()">
-                        <i class="fas fa-volume-up"></i> Speak Reply (Translate)
-                    </button>
-                    <button class="action-btn btn-send" onclick="toggleReport(true)">
-                        <i class="fas fa-paper-plane"></i> Send Report
-                    </button>
+                <div class="info-card">
+                    <div class="info-label">Severity Assessment</div>
+                    <div class="info-value" id="severityOutput">--</div>
+                </div>
+
+                <div class="doctor-input-area">
+                    <div class="info-label" style="color: var(--success);">Doctor Response (Hindi/English)</div>
+                    <textarea id="doctorInput" class="doc-textarea" placeholder="Type advice or Rx here..."></textarea>
+                    <div class="doc-btn-group">
+                        <button class="btn-send" onclick="sendDoctorReply()">
+                            <i class="fas fa-paper-plane"></i> Reply
+                        </button>
+                        <button class="btn-magic" onclick="autoFillRx()" title="Auto-Fill Prescription (Demo)">
+                            <i class="fas fa-magic"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 10px; text-align: center; font-size: 0.8rem; color: #94a3b8;">
+                    <i class="fas fa-shield-alt"></i> PII Data Filter Active
                 </div>
             </div>
-        </aside>
+        </section>
     </main>
 
     <script>
-        // --- LOGIC ENGINE ---
-        // Simulating the backend AI for the demo
-        const demoData = {
-            symptom: "Severe Stomach Pain",
-            condition: "Acute Gastritis",
-            nativeAudio: "Morom re dukha ache...",
-            translated: "Mujhe pet mein bohot dard ho raha hai. (I have severe stomach pain.)",
-            aiRx: "1. Antacid Syrup (10ml after food)\n2. Tab. Pantoprazole 40mg (Empty Stomach)\n3. Avoid spicy food for 3 days."
+        // --- Configuration & State ---
+        let isListening = false;
+        let recognition;
+        const synth = window.speechSynthesis;
+
+        // --- Demo Logic Engine (Simulates the Server-Side Translation) ---
+        // Maps keywords to specific Bodo/Santali outputs mentioned in your PDF
+        const medicalLogic = {
+            "pain": {
+                native: "Morom re dukha ache (Santali)",
+                hindi: "Mujhe pet mein dard hai",
+                diagnosis: "Gastritis / Abdominal Issue",
+                severity: "Moderate",
+                symptom: "Stomach Pain"
+            },
+            "stomach": {
+                native: "Morom re dukha ache (Santali)",
+                hindi: "Mujhe pet mein dard hai",
+                diagnosis: "Gastritis / Ulcer",
+                severity: "Moderate",
+                symptom: "Abdominal Discomfort"
+            },
+            "fever": {
+                native: "Ruaa aakade (Santali)",
+                hindi: "Mujhe tez bukhar hai",
+                diagnosis: "Viral Infection",
+                severity: "High",
+                symptom: "High Temperature"
+            },
+            "head": {
+                native: "Bohok hasuch (Santali)",
+                hindi: "Mera sir dard kar raha hai",
+                diagnosis: "Migraine / Tension",
+                severity: "Mild",
+                symptom: "Headache"
+            },
+            "default": {
+                native: "[Speech in Tribal Language]",
+                hindi: "Bataiye, aapko kya takleef hai?",
+                diagnosis: "Pending Analysis...",
+                severity: "Unknown",
+                symptom: "Unclear"
+            }
         };
 
-        let step = 0;
+        // --- Initialize Speech Recognition ---
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-IN'; // Using English to capture demo commands easily
 
-        // 1. Patient Speaks Logic
-        function runPatientDemo() {
-            const micBtn = document.getElementById('micBtn');
-            const status = document.getElementById('micStatus');
-            const log = document.getElementById('liveTranscript');
+            recognition.onstart = () => {
+                isListening = true;
+                updateMicState(true);
+                document.getElementById('aiStatus').innerText = "Listening to patient...";
+            };
 
-            if(step > 0) return; // Prevent double click for demo
+            recognition.onend = () => {
+                isListening = false;
+                updateMicState(false);
+                document.getElementById('aiStatus').innerText = "Processing audio...";
+            };
 
-            // Visuals: Active State
-            micBtn.classList.add('active');
-            status.innerText = "Listening...";
-            log.innerText = "Processing audio stream...";
-
-            // Delay to simulate processing time
-            setTimeout(() => {
-                micBtn.classList.remove('active');
-                status.innerText = "Processing...";
-                
-                // Update Log
-                log.innerText = `Detected: "${demoData.nativeAudio}"`;
-
-                // Add to Chat
-                addChatBubble(demoData.nativeAudio, demoData.translated, 'patient');
-
-                // Update AI Doctor Panel
-                updateDoctorPanel();
-                step = 1;
-                status.innerText = "Tap to Speak";
-            }, 2000);
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        processSpeech(event.results[i][0].transcript);
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                        document.getElementById('liveTranscript').innerText = interimTranscript;
+                    }
+                }
+            };
+        } else {
+            alert("Please use Google Chrome for full voice features.");
         }
 
-        // 2. Doctor Reply Logic
-        function doctorReply() {
-            if(step === 0) {
-                alert("Please wait for patient input first.");
-                return;
+        // --- Core Functions ---
+
+        function toggleListening() {
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
             }
-
-            const reply = "Okay, I understand. I am sending you a prescription for Gastritis. Please take rest.";
-            const translatedReply = "Thik hai. Main dawai likh raha hoon. Aaram karein.";
-
-            addChatBubble(reply, translatedReply, 'doctor');
         }
 
-        // 3. Helper: Update Doctor AI Panel
-        function updateDoctorPanel() {
-            document.getElementById('aiSymptom').innerText = demoData.symptom;
-            document.getElementById('aiCondition').innerText = demoData.condition;
+        function updateMicState(active) {
+            const btn = document.getElementById('micButton');
+            if (active) {
+                btn.classList.add('listening');
+                btn.innerHTML = '<i class="fas fa-stop"></i>';
+            } else {
+                btn.classList.remove('listening');
+                btn.innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        }
+
+        function processSpeech(transcript) {
+            const inputLower = transcript.toLowerCase();
+            document.getElementById('liveTranscript').innerText = transcript;
             
-            // Auto-fill Rx for convenience (simulating AI Assist)
-            const rxBox = document.getElementById('rxInput');
-            rxBox.value = "[AI Auto-Fill]\n" + demoData.aiRx;
+            // 1. Analyze for Keywords
+            let match = medicalLogic.default;
+            if (inputLower.includes('pain') || inputLower.includes('stomach') || inputLower.includes('hurt')) match = medicalLogic.stomach;
+            else if (inputLower.includes('fever') || inputLower.includes('hot')) match = medicalLogic.fever;
+            else if (inputLower.includes('head')) match = medicalLogic.head;
+
+            // 2. Update UI with delays to simulate AI processing
+            document.getElementById('aiStatus').innerText = "Translating & Analyzing...";
+            
+            // Step A: Patient Bubble (Native)
+            setTimeout(() => {
+                addMessage(match.native, match.hindi, 'patient');
+                document.getElementById('detectedLang').innerText = "Santali / Bodo";
+                speakText(match.hindi); // Computer speaks the translation
+            }, 500);
+
+            // Step B: Update Medical Dashboard
+            setTimeout(() => {
+                updateMedicalDash(match);
+                document.getElementById('aiStatus').innerText = "Ready for next input";
+            }, 1000);
         }
 
-        // 4. Helper: Chat Bubble
-        function addChatBubble(native, trans, role) {
-            const chat = document.getElementById('chatContainer');
+        function addMessage(mainText, subText, type) {
+            const container = document.getElementById('messageContainer');
             const div = document.createElement('div');
+            div.className = `message-bubble ${type === 'patient' ? 'bubble-patient' : 'bubble-doctor'}`;
             
-            div.className = `msg-bubble ${role === 'patient' ? 'msg-patient' : 'msg-doctor'}`;
+            // Logic to label the bubbles correctly
+            let metaLabel = type === 'patient' ? 'Patient (Native)' : 'Doctor (Hindi)';
+            let transLabel = type === 'patient' ? 'Translated: ' : 'Translated to Santali: ';
+
             div.innerHTML = `
-                <span class="msg-meta">${role === 'patient' ? 'Patient (Santali)' : 'Doctor (English)'}</span>
-                ${native}
-                <div class="trans-text">
-                    <i class="fas fa-language"></i> ${trans}
+                <span class="bubble-meta">${metaLabel}</span>
+                ${mainText}
+                <div class="translated-text">
+                    <i class="fas fa-language"></i> ${transLabel}"${subText}"
                 </div>
             `;
             
-            chat.appendChild(div);
-            chat.scrollTop = chat.scrollHeight;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
         }
 
-        // 5. Report Modal Logic
-        function toggleReport(show) {
-            const modal = document.getElementById('reportModal');
-            if(show) {
-                // Populate Data
-                document.getElementById('repDiag').innerText = document.getElementById('aiCondition').innerText;
-                document.getElementById('repContent').innerText = document.getElementById('rxInput').value;
-                document.getElementById('repLang').innerText = document.getElementById('patientLang').value;
-                
-                // Show
-                modal.style.display = 'flex';
+        function updateMedicalDash(data) {
+            // Symptoms
+            const symList = document.getElementById('symptomsList');
+            symList.innerHTML = `<span class="symptom-tag">${data.symptom}</span>`;
+            
+            // Diagnosis
+            document.getElementById('diagnosisOutput').innerText = data.diagnosis;
+            
+            // Severity
+            const sevEl = document.getElementById('severityOutput');
+            sevEl.innerText = data.severity;
+            
+            // Color coding severity
+            if(data.severity === 'High') sevEl.style.color = 'var(--danger)';
+            else if(data.severity === 'Moderate') sevEl.style.color = 'var(--accent)';
+            else sevEl.style.color = 'var(--success)';
+        }
+
+        // --- NEW: DOCTOR REPLY FUNCTIONS ---
+
+        function sendDoctorReply() {
+            const input = document.getElementById('doctorInput');
+            const doctorText = input.value.trim();
+            if(!doctorText) return;
+
+            // Simulate Reverse Translation (Hindi/Eng -> Tribal)
+            // For the demo, we append a mock Santali translation.
+            const mockTranslation = "[Santali Audio Output Generated]"; 
+            
+            // Add Doctor Message to Chat
+            addMessage(doctorText, mockTranslation, 'doctor');
+            
+            // Clear Input
+            input.value = '';
+
+            // Optional: Speak the Doctor's text (simulating the device speaking to the patient)
+            speakText("Translation sent: " + doctorText);
+        }
+
+        function autoFillRx() {
+            // "Magic Wand" Logic - Auto-suggests based on current diagnosis
+            const diag = document.getElementById('diagnosisOutput').innerText;
+            const input = document.getElementById('doctorInput');
+            
+            if(diag.includes('Gastritis') || diag.includes('Stomach')) {
+                input.value = "Take Antacid syrup (10ml) before food and avoid spicy meals.";
+            } else if(diag.includes('Viral') || diag.includes('Fever')) {
+                input.value = "Take Paracetamol 500mg twice a day. Drink plenty of water.";
+            } else if(diag.includes('Headache') || diag.includes('Migraine')) {
+                input.value = "Rest in a dark room. Take one painkiller if necessary.";
             } else {
-                modal.style.display = 'none';
+                input.value = "Please describe your symptoms in more detail.";
+            }
+        }
+
+        function speakText(text) {
+            if (synth.speaking) {
+                console.error('speechSynthesis.speaking');
+                return;
+            }
+            if (text !== '') {
+                const utterThis = new SpeechSynthesisUtterance(text);
+                utterThis.lang = 'hi-IN'; // Set to Hindi for authenticity
+                utterThis.rate = 0.9;
+                synth.speak(utterThis);
             }
         }
     </script>
