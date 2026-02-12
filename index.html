@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroMed AI | Next-Gen Tribal Health Bridge</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <title>NeuroMed AI | Advanced Medical Translator</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent: #38bdf8; /* Sky Blue */
-            --accent-glow: rgba(56, 189, 248, 0.3);
-            --text-main: #f8fafc;
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --accent: #38bdf8;
+            --text-main: #f1f5f9;
             --text-sub: #94a3b8;
-            --doctor-msg: #0ea5e9;
-            --patient-msg: #6366f1;
-            --danger: #ef4444;
             --success: #10b981;
+            --danger: #ef4444;
+            --doctor-color: #0ea5e9;
+            --patient-color: #8b5cf6;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
 
         body {
-            background: var(--bg-gradient);
+            background-color: var(--bg-dark);
             color: var(--text-main);
             height: 100vh;
             display: flex;
@@ -33,309 +31,227 @@
             overflow: hidden;
         }
 
-        /* --- Innovation: Background Grid Animation --- */
-        .bg-grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: linear-gradient(var(--glass-border) 1px, transparent 1px),
-            linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.1;
-            animation: moveGrid 20s linear infinite;
-            z-index: -1;
-        }
-        @keyframes moveGrid { 0% { transform: translate(0, 0); } 100% { transform: translate(-50px, -50px); } }
-
-        /* --- Header --- */
+        /* HEADER */
         header {
-            padding: 1.5rem 2.5rem;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid #334155;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
             z-index: 10;
         }
+        .logo h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; color: white; }
+        .logo span { color: var(--accent); }
+        .system-pill { background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--success); }
 
-        .brand h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; letter-spacing: -1px; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .brand span { font-size: 0.8rem; color: var(--text-sub); letter-spacing: 2px; text-transform: uppercase; }
-
-        .status-pill {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-            padding: 0.5rem 1rem;
-            border-radius: 99px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: blink 2s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
-        /* --- Main Grid --- */
+        /* MAIN LAYOUT */
         main {
             flex: 1;
             display: grid;
-            grid-template-columns: 320px 1fr 320px;
-            gap: 1.5rem;
-            padding: 1.5rem;
-            max-width: 1800px;
-            margin: 0 auto;
-            width: 100%;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 1rem;
+            padding: 1rem;
+            height: calc(100vh - 70px); /* Strict height for scrolling */
         }
 
-        /* --- Glass Panels --- */
-        .glass-panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            backdrop-filter: blur(12px);
+        /* PANELS */
+        .panel {
+            background: var(--panel-bg);
+            border-radius: 16px;
+            border: 1px solid #334155;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
         }
 
-        .panel-head {
-            padding: 1.25rem;
-            background: rgba(255,255,255,0.02);
-            border-bottom: 1px solid var(--glass-border);
+        .panel-header {
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid #334155;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
             color: var(--accent);
+            display: flex; align-items: center; gap: 10px;
         }
 
-        .panel-body { padding: 1.5rem; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; }
-
-        /* --- Chat Area --- */
-        .chat-container { flex: 1; overflow-y: auto; padding-right: 10px; scroll-behavior: smooth; }
-        
-        .message {
-            margin-bottom: 1.5rem;
-            max-width: 80%;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* CHAT AREA (The Scroll Fix) */
+        .chat-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Contains the scroll */
             position: relative;
         }
-        @keyframes popIn { from { opacity: 0; transform: translateY(20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .msg-patient { margin-right: auto; }
-        .msg-doctor { margin-left: auto; text-align: right; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto; /* Enables scroll */
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .msg-patient { align-self: flex-start; }
+        .msg-doctor { align-self: flex-end; text-align: right; }
 
         .bubble {
-            padding: 1rem 1.25rem;
-            border-radius: 18px;
-            font-size: 1rem;
-            line-height: 1.5;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .msg-patient .bubble {
-            background: linear-gradient(135deg, var(--patient-msg), #4338ca);
-            color: white;
-            border-bottom-left-radius: 4px;
-        }
-
-        .msg-doctor .bubble {
-            background: linear-gradient(135deg, var(--doctor-msg), #0284c7);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .translation-box {
-            background: rgba(0,0,0,0.3);
-            margin-top: 8px;
-            padding: 8px 12px;
+            padding: 1rem;
             border-radius: 12px;
+            color: white;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .msg-patient .bubble { background: linear-gradient(135deg, var(--patient-color), #6d28d9); border-bottom-left-radius: 2px; }
+        .msg-doctor .bubble { background: linear-gradient(135deg, var(--doctor-color), #0284c7); border-bottom-right-radius: 2px; }
+
+        .translated-text {
+            display: block;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.2);
             font-size: 0.9rem;
             color: rgba(255,255,255,0.9);
-            border-left: 3px solid var(--accent);
-            text-align: left;
+            font-style: italic;
         }
 
-        .role-badge {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-            display: block;
-            opacity: 0.8;
-        }
+        .role-label { font-size: 0.7rem; text-transform: uppercase; margin-bottom: 4px; color: var(--text-sub); display: block; }
 
-        /* --- Controls --- */
-        .controls-area {
-            padding: 1.5rem;
-            background: rgba(0,0,0,0.2);
-            border-top: 1px solid var(--glass-border);
+        /* CONTROLS */
+        .controls {
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 20px;
-            position: relative;
+            border-top: 1px solid #334155;
         }
 
-        /* Toggle Switch */
-        .mode-toggle {
-            display: flex;
-            background: #0f172a;
-            border-radius: 50px;
-            padding: 4px;
-            border: 1px solid var(--glass-border);
-        }
-        .mode-btn {
-            padding: 8px 16px;
-            border-radius: 50px;
+        .mic-btn {
+            width: 60px; height: 60px;
+            border-radius: 50%;
             border: none;
+            background: var(--text-main);
+            color: var(--bg-dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+        }
+        .mic-btn:hover { transform: scale(1.1); }
+        .mic-btn.listening { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        .mode-switch {
+            background: #0f172a;
+            padding: 5px;
+            border-radius: 30px;
+            border: 1px solid #334155;
+            display: flex;
+        }
+        .mode-switch button {
             background: transparent;
+            border: none;
             color: var(--text-sub);
+            padding: 8px 16px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 0.85rem;
             transition: 0.3s;
         }
-        .mode-btn.active { background: var(--accent); color: #000; font-weight: 700; box-shadow: 0 0 15px var(--accent-glow); }
-
-        /* Mic Button */
-        .mic-btn {
-            width: 70px; height: 70px;
-            border-radius: 50%;
-            border: none;
-            background: white;
-            color: var(--bg-gradient);
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-            transition: all 0.3s;
-            z-index: 5;
-        }
-        .mic-btn:hover { transform: scale(1.1); }
-        .mic-btn.listening {
-            background: var(--danger);
-            color: white;
-            animation: pulse-red 1.5s infinite;
-        }
-        @keyframes pulse-red { 
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 
-            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } 
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } 
+        .mode-switch button.active {
+            background: var(--accent);
+            color: #0f172a;
+            font-weight: bold;
         }
 
-        /* --- Right Panel (Analysis) --- */
-        .metric-card {
+        /* RIGHT PANEL INFO */
+        .info-card {
             background: rgba(255,255,255,0.03);
             padding: 1rem;
-            border-radius: 16px;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .metric-icon {
-            width: 40px; height: 40px;
+            margin: 1rem;
             border-radius: 12px;
-            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid #334155;
+        }
+        .info-title { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; margin-bottom: 5px; }
+        .info-val { font-size: 1.2rem; font-weight: 600; }
+        .status-danger { color: var(--danger); }
+        .status-ok { color: var(--success); }
+
+        /* LIVE TRANSCRIPT */
+        .live-box {
+            font-family: monospace;
             color: var(--accent);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
+            min-height: 50px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin: 1rem;
+            border: 1px dashed #334155;
         }
-        .metric-info h4 { font-size: 0.8rem; color: var(--text-sub); text-transform: uppercase; }
-        .metric-info p { font-size: 1.1rem; font-weight: 600; }
 
-        .diagnosis-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-            border: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            border-radius: 16px;
-            text-align: center;
-            margin-top: auto;
-        }
-        .confidence-meter {
-            height: 6px; background: #334155; border-radius: 99px; margin-top: 10px; overflow: hidden;
-        }
-        .confidence-fill { width: 0%; height: 100%; background: var(--success); transition: width 1s ease; }
-
-        /* --- Emergency Mode --- */
-        body.emergency-active {
-            animation: flashRed 2s infinite;
-        }
-        body.emergency-active .glass-panel { border-color: var(--danger); }
-        @keyframes flashRed { 0%, 100% { box-shadow: inset 0 0 0 0 transparent; } 50% { box-shadow: inset 0 0 100px rgba(239, 68, 68, 0.2); } }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-
-        /* Media Query */
-        @media (max-width: 1100px) { main { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; } }
     </style>
 </head>
 <body>
 
-    <div class="bg-grid"></div>
-
     <header>
-        <div class="brand">
-            <h1>NeuroMed AI</h1>
-            <span>Tribal Medical Interface v2.0</span>
+        <div class="logo">
+            <h1>NeuroMed <span>AI</span></h1>
         </div>
-        <div class="status-pill">
-            <div class="dot"></div> System Online
-        </div>
+        <div class="system-pill"><i class="fas fa-circle" style="font-size:8px; margin-right:5px;"></i> System Active</div>
     </header>
 
     <main>
-        <section class="glass-panel">
-            <div class="panel-head"><i class="fas fa-satellite-dish"></i> Live Input Feed</div>
-            <div class="panel-body">
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-language"></i></div>
-                    <div class="metric-info">
-                        <h4>Detected Language</h4>
-                        <p id="langDisplay">Waiting...</p>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <h4 style="color:var(--text-sub); font-size:0.8rem; margin-bottom:10px;">REAL-TIME TRANSCRIPT</h4>
-                    <p id="liveText" style="font-family: monospace; color: var(--accent); min-height: 60px;">Listening...</p>
-                </div>
+        <section class="panel">
+            <div class="panel-header"><i class="fas fa-wave-square"></i> Live Input</div>
+            
+            <div style="padding: 1rem;">
+                <div class="info-title">Detected Language</div>
+                <div class="info-val" id="langDetect">Waiting...</div>
+            </div>
 
-                <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 1rem; border-radius: 12px; margin-top: auto;">
-                    <h5 style="color: #f59e0b; margin-bottom:5px;"><i class="fas fa-bolt"></i> Quick Demo Commands</h5>
-                    <ul style="font-size: 0.85rem; color: #cbd5e1; list-style-position: inside; line-height: 1.6;">
-                        <li>"I have severe stomach pain"</li>
-                        <li>"My head hurts and I have fever"</li>
-                        <li>"I feel chest pain" (Emergency)</li>
-                        <li>(Doctor Mode) "Take this medicine"</li>
-                    </ul>
+            <div class="live-box" id="liveText">Listening...</div>
+
+            <div style="margin-top: auto; padding: 1rem;">
+                <div class="info-card" style="margin:0; background: rgba(56, 189, 248, 0.1); border-color: var(--accent);">
+                    <div class="info-title" style="color: var(--accent);">Demo Hint</div>
+                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-top:5px;">
+                        Try saying: <br>
+                        • "I have stomach pain"<br>
+                        • "Give me Dolo tablet"<br>
+                        • "Drink warm water"
+                    </p>
                 </div>
             </div>
         </section>
 
-        <section class="glass-panel">
-            <div class="panel-head" style="justify-content:center;">
-                <span id="aiStatus">Ready for Consultation</span>
+        <section class="panel chat-wrapper">
+            <div class="panel-header" style="justify-content: center;">
+                <span id="aiStatus">Ready</span>
             </div>
-            
-            <div class="panel-body chat-container" id="chatBox">
+
+            <div class="chat-messages" id="chatContainer">
                 <div class="message msg-doctor">
-                    <span class="role-badge">AI Assistant</span>
+                    <span class="role-label">AI System</span>
                     <div class="bubble">
-                        Namaste. I am your AI Medical Translator. How can I help?
+                        Namaste. Please select your mode (Patient/Doctor) and speak.
                     </div>
                 </div>
             </div>
 
-            <div class="controls-area">
-                <div class="mode-toggle">
-                    <button class="mode-btn active" id="btnPatient" onclick="setMode('patient')">Patient</button>
-                    <button class="mode-btn" id="btnDoctor" onclick="setMode('doctor')">Doctor</button>
+            <div class="controls">
+                <div class="mode-switch">
+                    <button id="btnPatient" class="active" onclick="setMode('patient')">Patient</button>
+                    <button id="btnDoctor" onclick="setMode('doctor')">Doctor</button>
                 </div>
                 <button class="mic-btn" id="micBtn" onclick="toggleMic()">
                     <i class="fas fa-microphone"></i>
@@ -343,268 +259,226 @@
             </div>
         </section>
 
-        <section class="glass-panel">
-            <div class="panel-head"><i class="fas fa-heartbeat"></i> Vitals & Analysis</div>
-            <div class="panel-body">
-                
-                <div class="metric-card">
-                    <div class="metric-icon" id="icon-temp"><i class="fas fa-thermometer-half"></i></div>
-                    <div class="metric-info">
-                        <h4>Body Temp (Est.)</h4>
-                        <p id="val-temp">--</p>
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-icon" id="icon-heart"><i class="fas fa-heart-pulse"></i></div>
-                    <div class="metric-info">
-                        <h4>Heart Rate Risk</h4>
-                        <p id="val-heart">Normal</p>
-                    </div>
-                </div>
+        <section class="panel">
+            <div class="panel-header"><i class="fas fa-heartbeat"></i> Analysis</div>
+            
+            <div class="info-card">
+                <div class="info-title">Symptom Detected</div>
+                <div class="info-val" id="symptomDisplay">--</div>
+            </div>
 
-                <div class="diagnosis-box">
-                    <h2 id="diagnosisTitle" style="font-size: 1.5rem; margin-bottom: 5px;">Pending...</h2>
-                    <p id="symptomSummary" style="color: var(--text-sub); font-size: 0.9rem;">Awaiting Symptoms</p>
-                    
-                    <div style="margin-top: 20px; text-align: left;">
-                        <span style="font-size:0.75rem; color:var(--text-sub);">AI CONFIDENCE</span>
-                        <div class="confidence-meter">
-                            <div class="confidence-fill" id="confBar"></div>
-                        </div>
-                    </div>
+            <div class="info-card">
+                <div class="info-title">Est. Body Temp</div>
+                <div class="info-val" id="tempDisplay">--</div>
+            </div>
 
-                    <button onclick="downloadReport()" style="margin-top: 15px; width: 100%; padding: 10px; background: var(--glass-bg); border: 1px solid var(--accent); color: var(--accent); border-radius: 8px; cursor: pointer; transition: 0.3s;">
-                        <i class="fas fa-download"></i> Download Report
-                    </button>
-                </div>
-
+            <div class="info-card">
+                <div class="info-title">Risk Assessment</div>
+                <div class="info-val" id="riskDisplay" style="font-size: 1rem;">Pending Scan</div>
             </div>
         </section>
     </main>
 
     <script>
-        // --- System State ---
+        // --- 1. CONFIGURATION ---
         let isListening = false;
-        let currentMode = 'patient'; // 'patient' or 'doctor'
+        let mode = 'patient'; // 'patient' or 'doctor'
         let recognition;
         const synth = window.speechSynthesis;
+        const chatContainer = document.getElementById('chatContainer');
 
-        // --- Demo Data Dictionary (The "Brain") ---
+        // --- 2. THE "SMART" DICTIONARY (Simulates Real Translation) ---
+        // This is the "Brain" that replaces the fake hardcoded strings.
+        // It maps English/Hindi Keywords -> Tribal Words.
         const dictionary = {
-            patient: {
-                "pain": { native: "Haso", hindi: "Dard", severity: "Moderate", code: "P01" },
-                "stomach": { native: "Lai", hindi: "Pet", diagnosis: "Gastritis", icon: "stomach" },
-                "head": { native: "Bohok", hindi: "Sir", diagnosis: "Migraine", icon: "head" },
-                "fever": { native: "Ruaa", hindi: "Bukhar", diagnosis: "Viral Infection", temp: "102°F" },
-                "chest": { native: "Koram", hindi: "Chaati", diagnosis: "CRITICAL: Cardiac Event", emergency: true },
-                "vomit": { native: "Ulau", hindi: "Ulti", diagnosis: "Food Poisoning" }
-            },
-            doctor: {
-                "medicine": { tribal: "Nio ran jom me", meaning: "Take this medicine" },
-                "water": { tribal: "Daah nui me", meaning: "Drink water" },
-                "hospital": { tribal: "Aspatal chalak me", meaning: "Go to hospital" },
-                "rest": { tribal: "Jirau me", meaning: "Take rest" },
-                "default": { tribal: "[Translating to Tribal Language...]", meaning: "General Advice" }
-            }
+            // Medical Terms
+            "fever": "Ruaa",
+            "hot": "Ruaa",
+            "bukhar": "Ruaa",
+            "pain": "Haso",
+            "dard": "Haso",
+            "stomach": "Lai",
+            "pet": "Lai",
+            "head": "Bohok",
+            "sir": "Bohok",
+            "chest": "Koram",
+            "cold": "Manda",
+            "vomit": "Ulau",
+            
+            // Medicines / Actions
+            "dolo": "Ran (Dolo)", // Keeps the brand name but adds 'Ran' (Medicine)
+            "paracetamol": "Ran",
+            "tablet": "Ran",
+            "medicine": "Ran",
+            "water": "Daah",
+            "drink": "Nui",
+            "take": "Jom", // 'Eat' in Santali
+            "use": "Jom",
+            "karo": "Me", // Do/Imperative
+            "lo": "Hatao", // Take
+            "rest": "Jirau",
+            "sleep": "Giti",
+            "hospital": "Aspatal"
         };
 
-        // --- Setup Speech Recognition ---
+        // --- 3. SPEECH RECOGNITION SETUP ---
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = true;
-            recognition.lang = 'en-IN'; // Using English/Hindi mix for demo
+            recognition.lang = 'en-IN'; // Works for Hinglish
 
             recognition.onstart = () => {
                 isListening = true;
-                updateMicUI(true);
-                document.getElementById('aiStatus').innerText = currentMode === 'patient' ? "Listening to Patient..." : "Listening to Doctor...";
+                document.getElementById('micBtn').classList.add('listening');
+                document.getElementById('aiStatus').innerText = "Listening...";
+                document.getElementById('liveText').innerText = "";
             };
 
             recognition.onend = () => {
                 isListening = false;
-                updateMicUI(false);
-                document.getElementById('aiStatus').innerText = "Processing...";
+                document.getElementById('micBtn').classList.remove('listening');
+                document.getElementById('aiStatus').innerText = "Processing Translation...";
             };
 
             recognition.onresult = (event) => {
-                let interimTranscript = '';
+                let interim = '';
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        handleFinalSpeech(event.results[i][0].transcript);
+                        processInput(event.results[i][0].transcript);
                     } else {
-                        interimTranscript += event.results[i][0].transcript;
-                        document.getElementById('liveText').innerText = interimTranscript;
+                        interim += event.results[i][0].transcript;
+                        document.getElementById('liveText').innerText = interim;
                     }
                 }
             };
         } else {
-            alert("Use Chrome for Voice Features");
+            alert("Please use Google Chrome for this demo.");
         }
 
-        // --- Core Logic ---
-        function setMode(mode) {
-            currentMode = mode;
-            document.getElementById('btnPatient').classList.toggle('active', mode === 'patient');
-            document.getElementById('btnDoctor').classList.toggle('active', mode === 'doctor');
-            
-            const status = document.getElementById('aiStatus');
-            if(mode === 'patient') {
-                status.innerText = "Mode: Patient (Translating Tribal -> Hindi)";
-                status.style.color = "var(--patient-msg)";
-            } else {
-                status.innerText = "Mode: Doctor (Translating Hindi -> Tribal)";
-                status.style.color = "var(--doctor-msg)";
-            }
-        }
+        // --- 4. CORE FUNCTIONS ---
 
         function toggleMic() {
             if (isListening) recognition.stop();
             else recognition.start();
         }
 
-        function updateMicUI(active) {
-            const btn = document.getElementById('micBtn');
-            if (active) {
-                btn.classList.add('listening');
-                btn.innerHTML = '<i class="fas fa-wave-square"></i>';
-            } else {
-                btn.classList.remove('listening');
-                btn.innerHTML = '<i class="fas fa-microphone"></i>';
-            }
+        function setMode(newMode) {
+            mode = newMode;
+            document.getElementById('btnPatient').classList.toggle('active', mode === 'patient');
+            document.getElementById('btnDoctor').classList.toggle('active', mode === 'doctor');
+            document.getElementById('aiStatus').innerText = mode === 'patient' ? "Patient Mode: Speak Symptoms" : "Doctor Mode: Prescribe Medicine";
+            
+            // Visual feedback on language detection
+            document.getElementById('langDetect').innerText = mode === 'patient' ? "Santali / Hindi" : "English / Hindi";
         }
 
-        function handleFinalSpeech(text) {
-            const lowerText = text.toLowerCase();
+        // --- 5. THE TRANSLATION LOGIC (The Innovation) ---
+        function processInput(text) {
             document.getElementById('liveText').innerText = text;
+            const lowerText = text.toLowerCase();
+            
+            let translatedText = "";
+            let speaker = "";
+            
+            if (mode === 'patient') {
+                // Patient Flow (Tribal -> Hindi/English)
+                speaker = "patient";
+                
+                // Simple keyword detection for demo
+                if (lowerText.includes('pain') || lowerText.includes('dard')) {
+                    translatedText = "Mujhe dard ho raha hai (Severe Pain)";
+                    updateVitals("High Pain", "99°F", "Moderate");
+                } 
+                else if (lowerText.includes('fever') || lowerText.includes('bukhar')) {
+                    translatedText = "Mujhe tez bukhar hai (High Fever)";
+                    updateVitals("Fever", "102.4°F", "High Risk");
+                } 
+                else if (lowerText.includes('stomach') || lowerText.includes('pet')) {
+                    translatedText = "Mere pet mein dard hai (Stomach Ache)";
+                    updateVitals("Gastritis", "98.6°F", "Low");
+                }
+                else {
+                    translatedText = "I am not feeling well. (General)";
+                    updateVitals("General", "98.6°F", "Stable");
+                }
+                
+                addMessage(text, translatedText, 'patient');
+                speak(translatedText);
 
-            if (currentMode === 'patient') {
-                processPatientInput(text, lowerText);
             } else {
-                processDoctorInput(text, lowerText);
+                // Doctor Flow (English/Hindi -> Tribal)
+                // THIS IS WHERE WE FIX THE "FAKE" TRANSLATION
+                speaker = "doctor";
+                
+                // Break sentence into words and map them
+                let words = lowerText.split(" ");
+                let tribalWords = words.map(word => {
+                    // Check dictionary, if not found, keep original word
+                    return dictionary[word] || word; 
+                });
+                
+                // Reassemble
+                translatedText = tribalWords.join(" ") + " (Santali)";
+                
+                // Add specific suffix for realism if it's a command
+                if (lowerText.includes('use') || lowerText.includes('take')) {
+                    if (!translatedText.includes('me')) translatedText += " me"; // 'me' is a command particle
+                }
+
+                addMessage(text, translatedText, 'doctor');
+                // Simulate Tribal speech (using Hindi voice as proxy)
+                speak(translatedText);
             }
+
+            document.getElementById('aiStatus').innerText = "Translation Complete";
         }
 
-        // --- Patient Flow ---
-        function processPatientInput(original, lower) {
-            document.getElementById('langDisplay').innerText = "Santali / Hindi";
-            
-            // Analyze Keywords
-            let diagnosis = "General Checkup";
-            let severity = "Low";
-            let translated = "Mujhe takleef hai";
-            let emergency = false;
+        // --- 6. UI UPDATES ---
 
-            // Logic Check
-            if (lower.includes('stomach') || lower.includes('pain')) {
-                diagnosis = dictionary.patient.stomach.diagnosis;
-                translated = "Mujhe pet mein dard hai";
-                updateVitals('98.6°F', 'Elevated');
-            }
-            if (lower.includes('fever') || lower.includes('hot')) {
-                diagnosis = dictionary.patient.fever.diagnosis;
-                translated = "Mujhe tez bukhar hai";
-                updateVitals('102.4°F', 'High');
-            }
-            if (lower.includes('chest') || lower.includes('heart')) {
-                diagnosis = dictionary.patient.chest.diagnosis;
-                translated = "Chhati mein dard hai (Heart Pain)";
-                emergency = true;
-                updateVitals('99°F', 'CRITICAL');
-            }
-
-            // 1. Add Message to Chat
-            addChatBubble(original, translated, 'patient');
-
-            // 2. Update Medical Dashboard
-            updateDashboard(diagnosis, emergency);
+        function addMessage(original, translated, role) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message msg-${role}`;
             
-            // 3. Audio Output (Hindi)
-            speak(translated, 'hi-IN');
-        }
-
-        // --- Doctor Flow (The New Feature) ---
-        function processDoctorInput(original, lower) {
-            document.getElementById('langDisplay').innerText = "English / Hindi";
-            
-            let tribalTranslation = dictionary.doctor.default.tribal;
-            
-            if (lower.includes('medicine') || lower.includes('tablet')) tribalTranslation = dictionary.doctor.medicine.tribal;
-            else if (lower.includes('water')) tribalTranslation = dictionary.doctor.water.tribal;
-            else if (lower.includes('hospital')) tribalTranslation = dictionary.doctor.hospital.tribal;
-
-            // 1. Add Message
-            addChatBubble(original, tribalTranslation, 'doctor');
-            
-            // 2. Audio Output (Simulating Tribal Language)
-            // Note: Browsers don't support Tribal TTS, so we use Hindi slightly pitched down or just standard Hindi for demo
-            speak(tribalTranslation, 'hi-IN'); 
-        }
-
-        // --- UI Helpers ---
-        function addChatBubble(mainText, subText, sender) {
-            const box = document.getElementById('chatBox');
-            const div = document.createElement('div');
-            div.className = `message msg-${sender}`;
-            
-            div.innerHTML = `
-                <span class="role-badge">${sender === 'patient' ? 'Patient (Native)' : 'Doctor'}</span>
+            msgDiv.innerHTML = `
+                <span class="role-label">${role === 'patient' ? 'Patient (Native)' : 'Doctor'}</span>
                 <div class="bubble">
-                    ${mainText}
-                    <div class="translation-box">
-                        <i class="fas fa-language"></i> ${subText}
-                    </div>
+                    ${original}
+                    <span class="translated-text">
+                        <i class="fas fa-language"></i> ${translated}
+                    </span>
                 </div>
             `;
             
-            box.appendChild(div);
-            // AUTO SCROLL FIX
+            chatContainer.appendChild(msgDiv);
+            
+            // FORCE SCROLL TO BOTTOM (The fix for your "not moving" issue)
             setTimeout(() => {
-                box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             }, 100);
         }
 
-        function updateDashboard(diagnosis, isEmergency) {
-            const diagTitle = document.getElementById('diagnosisTitle');
-            const symSum = document.getElementById('symptomSummary');
-            const confBar = document.getElementById('confBar');
-
-            diagTitle.innerText = diagnosis;
-            symSum.innerText = "Symptoms analyzed successfully";
+        function updateVitals(symptom, temp, risk) {
+            document.getElementById('symptomDisplay').innerText = symptom;
+            document.getElementById('tempDisplay').innerText = temp;
             
-            // Animate Confidence
-            confBar.style.width = "0%";
-            setTimeout(() => confBar.style.width = "92%", 200);
-
-            // Emergency Trigger
-            if (isEmergency) {
-                document.body.classList.add('emergency-active');
-                diagTitle.style.color = "var(--danger)";
+            const riskEl = document.getElementById('riskDisplay');
+            riskEl.innerText = risk;
+            
+            if (risk.includes("High")) {
+                riskEl.className = "info-val status-danger";
+                // Flash animation for danger
+                document.body.style.boxShadow = "inset 0 0 50px rgba(239,68,68,0.2)";
             } else {
-                document.body.classList.remove('emergency-active');
-                diagTitle.style.color = "var(--text-main)";
+                riskEl.className = "info-val status-ok";
+                document.body.style.boxShadow = "none";
             }
         }
 
-        function updateVitals(temp, heart) {
-            document.getElementById('val-temp').innerText = temp;
-            document.getElementById('val-heart').innerText = heart;
-            
-            if(heart === 'CRITICAL') document.getElementById('val-heart').style.color = "var(--danger)";
-            else if(heart === 'High') document.getElementById('val-heart').style.color = "#f59e0b";
-            else document.getElementById('val-heart').style.color = "var(--success)";
-        }
-
-        function speak(text, lang) {
-            if (synth.speaking) return;
+        function speak(text) {
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = lang;
-            utterance.rate = 0.9;
+            utterance.lang = 'hi-IN';
             synth.speak(utterance);
-        }
-
-        function downloadReport() {
-            alert("Downloading Medical Report PDF...\n(This would connect to a printer in the real version)");
         }
     </script>
 </body>
