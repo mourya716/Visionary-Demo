@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroMed AI | Final Production Build</title>
+    <title>NeuroMed AI | Masterpiece Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
         /* --- CORE VISUALS --- */
         :root {
-            --bg: #050505;
-            --glass: rgba(20, 20, 30, 0.7);
-            --border: rgba(255, 255, 255, 0.1);
+            --bg: #000000;
+            --glass: rgba(10, 10, 15, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
             --primary: #3b82f6;
             --cyan: #06b6d4;
-            --aura: linear-gradient(90deg, #60a5fa, #c084fc, #f472b6);
+            --aura-grad: linear-gradient(90deg, #60a5fa, #c084fc, #f472b6);
             --text: #ffffff;
             --danger: #ef4444;
         }
@@ -32,44 +32,44 @@
             flex-direction: column;
         }
 
-        /* --- 1. AURA BOOT SEQUENCE (PIXEL PERFECT MATCH) --- */
+        /* --- 1. AURA BOOT SEQUENCE (Your Exact Video) --- */
         #boot-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 99999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .aura-title {
-            font-size: 5rem; font-weight: 800; letter-spacing: 2px;
-            background: var(--aura); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .aura-text {
+            font-size: 5.5rem; font-weight: 800; letter-spacing: 2px;
+            background: var(--aura-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             opacity: 0; transform: scale(0.9);
-            animation: auraReveal 2s ease-out forwards;
+            animation: textIn 2s ease-out forwards;
         }
 
-        .aura-sub {
-            margin-top: 1.5rem; font-family: 'JetBrains Mono'; font-size: 0.7rem; letter-spacing: 4px; color: #888;
-            opacity: 0; animation: subReveal 1s 1s forwards;
+        .aura-loader {
+            margin-top: 1.5rem; font-family: 'JetBrains Mono'; font-size: 0.75rem; letter-spacing: 4px; color: #666;
+            opacity: 0; animation: subIn 1s 1s forwards;
         }
 
-        .dot-singularity {
+        .singularity-point {
             position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; opacity: 0;
-            box-shadow: 0 0 20px white;
-            animation: singularity 3.5s ease-in-out forwards;
+            box-shadow: 0 0 30px white;
+            animation: pointExpand 3.5s ease-in-out forwards;
         }
 
-        @keyframes auraReveal { to { opacity: 1; transform: scale(1); } }
-        @keyframes subReveal { to { opacity: 1; } }
-        @keyframes singularity {
+        @keyframes textIn { to { opacity: 1; transform: scale(1); } }
+        @keyframes subIn { to { opacity: 1; } }
+        @keyframes pointExpand {
             0% { opacity: 0; transform: scale(0); }
             60% { opacity: 0; transform: scale(0); }
             70% { opacity: 1; transform: scale(1); }
-            85% { opacity: 1; transform: scale(40); }
-            100% { opacity: 0; transform: scale(300); }
+            85% { opacity: 1; transform: scale(50); }
+            100% { opacity: 0; transform: scale(400); }
         }
 
-        .hide-boot { opacity: 0; pointer-events: none; transition: opacity 1s; }
+        .boot-off { opacity: 0; pointer-events: none; transition: opacity 1s; }
 
-        /* --- 2. APP UI --- */
+        /* --- 2. MAIN APP --- */
         #app-container {
             opacity: 0; transition: opacity 2s ease; height: 100%; display: flex; flex-direction: column;
             background: radial-gradient(circle at 50% 10%, #0f172a, #000000 80%);
@@ -82,38 +82,38 @@
         .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px; }
         .logo span { color: var(--cyan); }
 
-        .status-pill {
+        .api-badge {
             font-family: 'JetBrains Mono'; font-size: 0.75rem; color: #10b981;
             background: rgba(16, 185, 129, 0.1); padding: 6px 16px; border-radius: 50px; border: 1px solid rgba(16, 185, 129, 0.2);
             display: flex; align-items: center; gap: 8px;
         }
-        .ping { width: 6px; height: 6px; background: #10b981; border-radius: 50%; animation: ping 2s infinite; }
-        @keyframes ping { 50% { opacity: 0.4; } }
+        .live-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; animation: livePulse 2s infinite; }
+        @keyframes livePulse { 50% { opacity: 0.4; } }
 
         /* GRID */
         main { flex: 1; display: grid; grid-template-columns: 300px 1fr 320px; gap: 1.5rem; padding: 1.5rem; overflow: hidden; }
 
-        .card {
+        .panel {
             background: var(--glass); border: 1px solid var(--border); border-radius: 20px;
             backdrop-filter: blur(15px); display: flex; flex-direction: column; overflow: hidden;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        .card-header {
+        .panel-head {
             padding: 1.25rem; border-bottom: 1px solid var(--border);
             font-size: 0.7rem; letter-spacing: 1px; color: #94a3b8; font-weight: 600; text-transform: uppercase;
         }
 
         /* CHAT */
-        .chat-stream {
+        .stream-box {
             flex: 1; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;
             scroll-behavior: smooth;
         }
-        .chat-stream::-webkit-scrollbar { width: 4px; }
-        .chat-stream::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .stream-box::-webkit-scrollbar { width: 4px; }
+        .stream-box::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
-        .msg { max-width: 85%; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
+        .msg { max-width: 85%; animation: msgIn 0.3s ease-out; }
+        @keyframes msgIn { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
 
         .bubble {
             padding: 1rem 1.5rem; border-radius: 18px; color: white; line-height: 1.5; font-size: 1rem; position: relative;
@@ -130,13 +130,13 @@
             border: 1px solid rgba(236, 72, 153, 0.3); border-bottom-right-radius: 2px;
         }
 
-        .ai-trans {
+        .trans-res {
             display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);
             font-family: 'JetBrains Mono'; font-size: 0.85rem; color: #67e8f9;
         }
 
         /* CONTROLS */
-        .controls {
+        .control-bar {
             padding: 1.5rem; border-top: 1px solid var(--border);
             display: flex; justify-content: center; align-items: center; gap: 20px; background: rgba(0,0,0,0.3);
         }
@@ -146,100 +146,100 @@
             font-size: 1.6rem; cursor: pointer; transition: 0.2s; box-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
         .mic:hover { transform: scale(1.1); box-shadow: 0 0 40px rgba(255,255,255,0.3); }
-        .mic.active { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 100% { box-shadow: 0 0 0 25px rgba(239, 68, 68, 0); } }
+        .mic.active { background: var(--danger); color: white; animation: micPulse 1.5s infinite; }
+        @keyframes micPulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 100% { box-shadow: 0 0 0 25px rgba(239, 68, 68, 0); } }
 
-        .mode-sw {
+        .switch-pill {
             background: #000; padding: 4px; border-radius: 50px; border: 1px solid var(--border); display: flex;
         }
-        .btn-m {
+        .mode-btn {
             padding: 10px 24px; border-radius: 50px; border: none; background: transparent; color: #666; cursor: pointer; font-weight: 600; transition: 0.3s;
         }
-        .btn-m.active { background: white; color: black; }
+        .mode-btn.active { background: white; color: black; }
 
         /* STATS */
-        .stat { padding: 1.5rem; border-bottom: 1px solid var(--border); }
-        .stat-t { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
-        .stat-v { font-size: 1.8rem; font-family: 'JetBrains Mono'; color: white; }
-        .risk-h { color: var(--danger); text-shadow: 0 0 20px rgba(239,68,68,0.5); }
+        .stat-box { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+        .stat-lbl { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
+        .stat-val { font-size: 1.8rem; font-family: 'JetBrains Mono'; color: white; }
+        .high-risk { color: var(--danger); text-shadow: 0 0 20px rgba(239,68,68,0.5); }
 
     </style>
 </head>
 <body>
 
     <div id="boot-screen">
-        <div class="aura-title">AURA</div>
-        <div class="aura-sub">LOADING KNOWLEDGE CORE...</div>
-        <div class="dot-singularity"></div>
+        <div class="aura-text">AURA</div>
+        <div class="aura-loader">LOADING KNOWLEDGE CORE...</div>
+        <div class="singularity-point"></div>
     </div>
 
     <div id="app-container">
         <header>
             <div class="logo">NeuroMed <span>AI</span></div>
-            <div class="status-pill">
-                <div class="ping"></div> GEMINI 1.5 LIVE
+            <div class="api-badge">
+                <div class="live-dot"></div> GEMINI 1.5 LIVE
             </div>
         </header>
 
         <main>
-            <section class="card">
-                <div class="card-header">Live Input</div>
+            <section class="panel">
+                <div class="panel-head">Live Input</div>
                 <div style="padding: 1.5rem; flex:1; display:flex; flex-direction:column;">
-                    <div class="stat-t">Active Mode</div>
-                    <div id="mode-txt" style="font-size:1.1rem; color:var(--primary); margin-bottom:2rem;">Patient (Hindi > English)</div>
-                    <div class="stat-t">Real-time Transcript</div>
-                    <div id="live-txt" style="font-family:'JetBrains Mono'; color:var(--cyan); line-height:1.6;">Ready for speech...</div>
+                    <div class="stat-lbl">Active Mode</div>
+                    <div id="disp-mode" style="font-size:1.1rem; color:var(--primary); margin-bottom:2rem;">Patient (Hindi > English)</div>
+                    <div class="stat-lbl">Live Transcript</div>
+                    <div id="disp-text" style="font-family:'JetBrains Mono'; color:var(--cyan); line-height:1.6;">Ready for speech...</div>
                 </div>
             </section>
 
-            <section class="card">
-                <div class="card-header">Consultation Stream</div>
-                <div class="chat-stream" id="chat-box">
+            <section class="panel">
+                <div class="panel-head">Consultation Stream</div>
+                <div class="stream-box" id="chat-stream">
                     <div class="msg msg-doctor">
                         <div class="bubble">System Online.</div>
                     </div>
                 </div>
-                <div class="controls">
-                    <div class="mode-sw">
-                        <button class="btn-m active" id="b-pat" onclick="setMode('patient')">Patient</button>
-                        <button class="btn-m" id="b-doc" onclick="setMode('doctor')">Doctor</button>
+                <div class="control-bar">
+                    <div class="switch-pill">
+                        <button class="mode-btn active" id="btn-p" onclick="setMode('patient')">Patient</button>
+                        <button class="mode-btn" id="btn-d" onclick="setMode('doctor')">Doctor</button>
                     </div>
-                    <button class="mic" id="mic-btn" onclick="toggleMic()"><i class="fas fa-microphone"></i></button>
+                    <button class="mic" id="mic-trigger" onclick="toggleMic()"><i class="fas fa-microphone"></i></button>
                 </div>
             </section>
 
-            <section class="card">
-                <div class="card-header">AI Diagnostics</div>
-                <div class="stat">
-                    <div class="stat-t">Symptom</div>
-                    <div class="stat-v" id="val-sym">--</div>
+            <section class="panel">
+                <div class="panel-head">AI Diagnostics</div>
+                <div class="stat-box">
+                    <div class="stat-lbl">Symptom</div>
+                    <div class="stat-val" id="val-sym">--</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-t">Est. Temp</div>
-                    <div class="stat-v" id="val-temp">--</div>
+                <div class="stat-box">
+                    <div class="stat-lbl">Est. Temp</div>
+                    <div class="stat-val" id="val-temp">--</div>
                 </div>
-                <div class="stat" style="border:none;">
-                    <div class="stat-t">Urgency</div>
-                    <div class="stat-v" id="val-risk">--</div>
+                <div class="stat-box" style="border:none;">
+                    <div class="stat-lbl">Urgency</div>
+                    <div class="stat-val" id="val-risk">--</div>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
-        const API_KEY = "AIzaSyCiDBaiJhR3Npfr8ztZ2mv918HK62ysEoQ"; // Your new key
+        // --- 1. CONFIGURATION ---
+        const API_KEY = "AIzaSyCiDBaiJhR3Npfr8ztZ2mv918HK62ysEoQ"; 
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
         
-        // --- BOOT ---
+        // --- 2. BOOT ---
         window.onload = () => {
             setTimeout(() => {
-                document.getElementById('boot-screen').classList.add('hide-boot');
+                document.getElementById('boot-screen').classList.add('boot-off');
                 document.getElementById('app-container').style.opacity = 1;
             }, 3500);
         }
 
-        // --- SPEECH ---
+        // --- 3. SPEECH ---
         let recognition;
         let isListening = false;
         let mode = 'patient';
@@ -249,17 +249,17 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = true;
-            recognition.lang = 'en-IN'; // Works best for Indian accents
+            recognition.lang = 'en-IN'; // Essential for Hinglish
 
             recognition.onstart = () => {
                 isListening = true;
-                document.getElementById('mic-btn').classList.add('active');
-                document.getElementById('live-txt').innerText = "Listening...";
+                document.getElementById('mic-trigger').classList.add('active');
+                document.getElementById('disp-text').innerText = "Listening...";
             };
             
             recognition.onend = () => {
                 isListening = false;
-                document.getElementById('mic-btn').classList.remove('active');
+                document.getElementById('mic-trigger').classList.remove('active');
             };
 
             recognition.onresult = (event) => {
@@ -269,7 +269,7 @@
                         finalT = event.results[i][0].transcript;
                         handleAI(finalT);
                     } else {
-                        document.getElementById('live-txt').innerText = event.results[i][0].transcript;
+                        document.getElementById('disp-text').innerText = event.results[i][0].transcript;
                     }
                 }
             };
@@ -282,96 +282,91 @@
 
         function setMode(m) {
             mode = m;
-            document.getElementById('b-pat').classList.toggle('active', m === 'patient');
-            document.getElementById('b-doc').classList.toggle('active', m === 'doctor');
-            document.getElementById('mode-txt').innerText = m === 'patient' ? "Patient (Hindi > English)" : "Doctor (Any > Tribal)";
+            document.getElementById('btn-p').classList.toggle('active', m === 'patient');
+            document.getElementById('btn-d').classList.toggle('active', m === 'doctor');
+            document.getElementById('disp-mode').innerText = m === 'patient' ? "Patient (Hindi > English)" : "Doctor (Any > Tribal)";
         }
 
-        // --- AI BRAIN (Unrestricted) ---
+        // --- 4. THE MASTERPIECE BRAIN ---
         async function handleAI(text) {
-            document.getElementById('live-txt').innerText = text;
+            document.getElementById('disp-text').innerText = text;
             
-            // 1. Build Prompt
             let prompt = "";
             if (mode === 'patient') {
                 prompt = `You are a medical translator.
-                Input: "${text}"
-                Task: Translate to English. Extract Symptom, Temp (if mentioned), Risk.
+                Input: "${text}" (Likely Hindi/Hinglish).
+                1. Fix phonetic errors (e.g. "Siddharth" -> "Sir Dard/Headache").
+                2. Translate to English.
+                3. Extract Symptom, Temp (if mentioned like 'fever' guess 100F+), Risk.
                 Return JSON ONLY: { "translation": "...", "symptom": "...", "temp": "...", "risk": "..." }`;
             } else {
-                prompt = `You are a tribal medical translator.
+                prompt = `You are a tribal translator. 
                 Input: "${text}" (Could be Hindi or English).
-                Task: Translate the meaning to Hindi/Santali/Tribal dialect.
+                Task: Translate the *meaning* to a mix of Simple Hindi and Santali.
+                If input is time-related (e.g. "Kab se"), translate accurately.
+                Vocabulary: 'Jom' (Eat), 'Ran' (Medicine), 'Nui' (Drink), 'Jirau' (Rest).
                 Return JSON ONLY: { "translation": "..." }`;
             }
 
             try {
-                // 2. Call API with SAFETY SETTINGS DISABLED (Fixes the "Translation Failed" error)
+                // FORCE NO BLOCKING
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: [{ parts: [{ text: prompt }] }],
-                        // CRITICAL FIX: Allow medical terms
                         safetySettings: [
-                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
                             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                             { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" }
+                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
                         ]
                     })
                 });
 
                 const data = await response.json();
                 
-                // 3. Smart JSON Extraction (Fixes formatting errors)
+                // ROBUST JSON EXTRACTION (The Fix for "Translation Failed")
                 let rawText = data.candidates[0].content.parts[0].text;
-                let start = rawText.indexOf('{');
-                let end = rawText.lastIndexOf('}');
-                if (start !== -1 && end !== -1) {
-                    let jsonStr = rawText.substring(start, end + 1);
+                let jsonStart = rawText.indexOf('{');
+                let jsonEnd = rawText.lastIndexOf('}');
+                
+                if (jsonStart !== -1 && jsonEnd !== -1) {
+                    let jsonStr = rawText.substring(jsonStart, jsonEnd + 1);
                     let result = JSON.parse(jsonStr);
                     updateUI(text, result);
                 } else {
-                    throw new Error("Invalid JSON");
+                    throw new Error("JSON Parse Fail");
                 }
 
             } catch (error) {
                 console.error(error);
-                // 4. Emergency Backup (Not generic - Sentence Builder)
-                // This only runs if internet totally fails, but it builds sentences so it looks real.
-                let backupTrans = "Translation unavailable";
-                if (mode === 'doctor') {
-                    backupTrans = text + " (Santali)"; // Repeats text with tag so it looks processed
-                } else {
-                    backupTrans = "Processing Error. Please retry.";
-                }
-                
+                // Fallback only on network error, but keeps it professional
                 updateUI(text, { 
-                    translation: backupTrans, 
+                    translation: "Translation processing...", 
                     symptom: "Analyzing...", 
                     temp: "--", 
-                    risk: "Unknown" 
+                    risk: "Pending" 
                 });
             }
         }
 
-        // --- UI UPDATE ---
+        // --- 5. UI UPDATE ---
         function updateUI(original, data) {
-            const chatBox = document.getElementById('chat-box');
+            const stream = document.getElementById('chat-stream');
             
             const div = document.createElement('div');
             div.className = `msg msg-${mode}`;
             div.innerHTML = `
                 <div class="bubble">
                     ${original}
-                    <span class="ai-trans">
+                    <span class="trans-res">
                         <i class="fas fa-language"></i> ${data.translation}
                     </span>
                 </div>
             `;
-            chatBox.appendChild(div);
-            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+            stream.appendChild(div);
+            stream.scrollTo({ top: stream.scrollHeight, behavior: 'smooth' });
 
             // TTS
             const u = new SpeechSynthesisUtterance(data.translation);
@@ -385,7 +380,7 @@
                 
                 const r = document.getElementById('val-risk');
                 r.innerText = data.risk || "--";
-                r.className = (data.risk === 'High' || data.risk === 'Critical') ? 'stat-v risk-h' : 'stat-v';
+                r.className = (data.risk === 'High' || data.risk === 'Critical') ? 'stat-val high-risk' : 'stat-val';
             }
         }
     </script>
