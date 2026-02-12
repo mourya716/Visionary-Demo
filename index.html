@@ -3,89 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroMed AI | Advanced Medical Translator</title>
+    <title>NeuroMed AI | Sentient Medical Interface</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --panel-bg: #1e293b;
-            --accent: #38bdf8;
-            --text-main: #f1f5f9;
-            --text-sub: #94a3b8;
-            --success: #10b981;
-            --danger: #ef4444;
-            --doctor-color: #0ea5e9;
-            --patient-color: #8b5cf6;
+            --bg-deep: #050505;
+            --panel-bg: rgba(20, 20, 30, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
+            --neon-blue: #00f3ff;
+            --neon-green: #0aff0a;
+            --danger: #ff003c;
+            --text-main: #e0e0e0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-deep);
             color: var(--text-main);
             height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
-        /* HEADER */
+        /* --- 1. THE CINEMATIC BOOT SEQUENCE --- */
+        #boot-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 5rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--neon-green);
+        }
+
+        .boot-line {
+            opacity: 0;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px; height: 20px;
+            background: var(--neon-green);
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        /* Fade out boot screen */
+        .boot-finish { animation: fadeOut 1s forwards; pointer-events: none; }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        /* --- 2. MAIN INTERFACE (Glassmorphism) --- */
+        #app-layer {
+            opacity: 0; /* Hidden until boot finishes */
+            transition: opacity 2s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+        }
+
         header {
-            padding: 1rem 2rem;
-            background: rgba(15, 23, 42, 0.9);
-            border-bottom: 1px solid #334155;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
+            backdrop-filter: blur(10px);
         }
-        .logo h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; color: white; }
-        .logo span { color: var(--accent); }
-        .system-pill { background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--success); }
 
-        /* MAIN LAYOUT */
+        .brand { font-family: 'JetBrains Mono'; font-weight: 700; letter-spacing: -1px; font-size: 1.5rem; color: white; }
+        .brand span { color: var(--neon-blue); }
+
+        .api-pill {
+            font-size: 0.75rem; 
+            background: rgba(0, 243, 255, 0.1); 
+            border: 1px solid var(--neon-blue); 
+            color: var(--neon-blue); 
+            padding: 4px 12px; 
+            border-radius: 99px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* GRID LAYOUT */
         main {
             flex: 1;
             display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            gap: 1rem;
-            padding: 1rem;
-            height: calc(100vh - 70px); /* Strict height for scrolling */
-        }
-
-        /* PANELS */
-        .panel {
-            background: var(--panel-bg);
-            border-radius: 16px;
-            border: 1px solid #334155;
-            display: flex;
-            flex-direction: column;
+            grid-template-columns: 320px 1fr 320px;
+            gap: 1.5rem;
+            padding: 1.5rem;
             overflow: hidden;
         }
 
-        .panel-header {
+        /* PANELS */
+        .glass-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .panel-head {
             padding: 1rem;
-            background: rgba(0,0,0,0.2);
-            border-bottom: 1px solid #334155;
-            font-weight: 600;
-            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            font-family: 'JetBrains Mono';
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-main);
+            letter-spacing: 1px;
             display: flex; align-items: center; gap: 10px;
         }
 
-        /* CHAT AREA (The Scroll Fix) */
-        .chat-wrapper {
+        /* CHAT AREA */
+        .chat-scroll-area {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Contains the scroll */
-            position: relative;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto; /* Enables scroll */
+            overflow-y: auto;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
@@ -93,270 +138,275 @@
             scroll-behavior: smooth;
         }
 
-        .message {
-            max-width: 85%;
-            animation: fadeIn 0.3s ease;
+        .msg {
+            max-width: 80%;
+            position: relative;
+            animation: slideUp 0.4s ease;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .msg-patient { align-self: flex-start; }
         .msg-doctor { align-self: flex-end; text-align: right; }
 
         .bubble {
-            padding: 1rem;
+            padding: 1rem 1.25rem;
             border-radius: 12px;
-            color: white;
+            font-size: 1rem;
+            line-height: 1.6;
             position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        .msg-patient .bubble { background: linear-gradient(135deg, var(--patient-color), #6d28d9); border-bottom-left-radius: 2px; }
-        .msg-doctor .bubble { background: linear-gradient(135deg, var(--doctor-color), #0284c7); border-bottom-right-radius: 2px; }
 
-        .translated-text {
+        .msg-patient .bubble {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            color: #ddd6fe;
+            border-bottom-left-radius: 0;
+        }
+
+        .msg-doctor .bubble {
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid rgba(14, 165, 233, 0.5);
+            color: #bae6fd;
+            border-bottom-right-radius: 0;
+        }
+
+        .translation {
             display: block;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.9);
-            font-style: italic;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--neon-blue);
         }
-
-        .role-label { font-size: 0.7rem; text-transform: uppercase; margin-bottom: 4px; color: var(--text-sub); display: block; }
 
         /* CONTROLS */
         .controls {
-            padding: 1rem;
-            background: rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
             display: flex;
-            align-items: center;
             justify-content: center;
             gap: 20px;
-            border-top: 1px solid #334155;
+            background: rgba(0,0,0,0.3);
         }
 
         .mic-btn {
-            width: 60px; height: 60px;
+            width: 70px; height: 70px;
             border-radius: 50%;
-            border: none;
-            background: var(--text-main);
-            color: var(--bg-dark);
+            border: 1px solid var(--neon-blue);
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
             font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
-        }
-        .mic-btn:hover { transform: scale(1.1); }
-        .mic-btn.listening { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
-        
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-
-        .mode-switch {
-            background: #0f172a;
-            padding: 5px;
-            border-radius: 30px;
-            border: 1px solid #334155;
-            display: flex;
-        }
-        .mode-switch button {
-            background: transparent;
-            border: none;
-            color: var(--text-sub);
-            padding: 8px 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.85rem;
             transition: 0.3s;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            position: relative;
+            overflow: hidden;
         }
-        .mode-switch button.active {
-            background: var(--accent);
-            color: #0f172a;
-            font-weight: bold;
+        
+        .mic-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 40px var(--neon-blue); }
+        
+        .mic-btn.processing::after {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            border-top: 2px solid white; border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* RIGHT PANEL INFO */
-        .info-card {
-            background: rgba(255,255,255,0.03);
-            padding: 1rem;
-            margin: 1rem;
-            border-radius: 12px;
-            border: 1px solid #334155;
-        }
-        .info-title { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; margin-bottom: 5px; }
-        .info-val { font-size: 1.2rem; font-weight: 600; }
-        .status-danger { color: var(--danger); }
-        .status-ok { color: var(--success); }
-
-        /* LIVE TRANSCRIPT */
-        .live-box {
-            font-family: monospace;
-            color: var(--accent);
-            min-height: 50px;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
+        .mode-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 20px;
             border-radius: 8px;
-            margin: 1rem;
-            border: 1px dashed #334155;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'JetBrains Mono';
         }
+        .mode-btn.active { background: var(--text-main); color: #000; font-weight: bold; box-shadow: 0 0 15px white; }
+
+        /* ANALYSIS PANEL */
+        .stat-box {
+            background: rgba(255,255,255,0.03);
+            margin: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .stat-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-val { font-size: 1.5rem; font-weight: 600; font-family: 'JetBrains Mono'; }
+        
+        .risk-high { color: var(--danger); text-shadow: 0 0 10px var(--danger); animation: pulseRed 2s infinite; }
+        .risk-low { color: var(--neon-green); }
+        
+        @keyframes pulseRed { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <h1>NeuroMed <span>AI</span></h1>
-        </div>
-        <div class="system-pill"><i class="fas fa-circle" style="font-size:8px; margin-right:5px;"></i> System Active</div>
-    </header>
+    <div id="boot-layer">
+        <div id="boot-text"></div>
+        <div class="cursor"></div>
+    </div>
 
-    <main>
-        <section class="panel">
-            <div class="panel-header"><i class="fas fa-wave-square"></i> Live Input</div>
-            
-            <div style="padding: 1rem;">
-                <div class="info-title">Detected Language</div>
-                <div class="info-val" id="langDetect">Waiting...</div>
+    <div id="app-layer">
+        <header>
+            <div class="brand">NeuroMed<span>.AI</span></div>
+            <div class="api-pill">
+                <i class="fas fa-satellite-dish"></i> GEMINI-1.5 CONNECTED
             </div>
+        </header>
 
-            <div class="live-box" id="liveText">Listening...</div>
-
-            <div style="margin-top: auto; padding: 1rem;">
-                <div class="info-card" style="margin:0; background: rgba(56, 189, 248, 0.1); border-color: var(--accent);">
-                    <div class="info-title" style="color: var(--accent);">Demo Hint</div>
-                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-top:5px;">
-                        Try saying: <br>
-                        • "I have stomach pain"<br>
-                        • "Give me Dolo tablet"<br>
-                        • "Drink warm water"
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section class="panel chat-wrapper">
-            <div class="panel-header" style="justify-content: center;">
-                <span id="aiStatus">Ready</span>
-            </div>
-
-            <div class="chat-messages" id="chatContainer">
-                <div class="message msg-doctor">
-                    <span class="role-label">AI System</span>
-                    <div class="bubble">
-                        Namaste. Please select your mode (Patient/Doctor) and speak.
+        <main>
+            <section class="glass-panel">
+                <div class="panel-head"><i class="fas fa-stream"></i> Real-Time Feed</div>
+                <div style="padding: 1.5rem; flex: 1; display:flex; flex-direction:column;">
+                    <div class="stat-label">DETECTED LANGUAGE</div>
+                    <div id="lang-display" style="font-size: 1.2rem; color: var(--neon-blue); margin-bottom: 20px;">Waiting for input...</div>
+                    
+                    <div class="stat-label">LIVE TRANSCRIPT</div>
+                    <div id="live-text" style="font-family: 'JetBrains Mono'; color: #0aff0a; line-height:1.5;">Listening...</div>
+                    
+                    <div style="margin-top:auto; font-size:0.75rem; color:#666;">
+                        > Secure Connection Established<br>
+                        > Latency: 42ms<br>
+                        > Model: Gemini 1.5 Flash
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="controls">
-                <div class="mode-switch">
-                    <button id="btnPatient" class="active" onclick="setMode('patient')">Patient</button>
-                    <button id="btnDoctor" onclick="setMode('doctor')">Doctor</button>
+            <section class="glass-panel">
+                <div class="panel-head" style="justify-content:center;">CONSULTATION INTERFACE</div>
+                
+                <div class="chat-scroll-area" id="chat-box">
+                    <div class="msg msg-doctor">
+                        <div class="bubble">
+                            System initialized. I am ready to translate any medical emergency.
+                            <span class="translation">Mode: Universal Translator</span>
+                        </div>
+                    </div>
                 </div>
-                <button class="mic-btn" id="micBtn" onclick="toggleMic()">
-                    <i class="fas fa-microphone"></i>
-                </button>
-            </div>
-        </section>
 
-        <section class="panel">
-            <div class="panel-header"><i class="fas fa-heartbeat"></i> Analysis</div>
-            
-            <div class="info-card">
-                <div class="info-title">Symptom Detected</div>
-                <div class="info-val" id="symptomDisplay">--</div>
-            </div>
+                <div class="controls">
+                    <button class="mode-btn active" id="btn-patient" onclick="setMode('patient')">PATIENT</button>
+                    <button class="mode-btn" id="btn-doctor" onclick="setMode('doctor')">DOCTOR</button>
+                    <button class="mic-btn" id="mic-btn" onclick="toggleMic()">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+            </section>
 
-            <div class="info-card">
-                <div class="info-title">Est. Body Temp</div>
-                <div class="info-val" id="tempDisplay">--</div>
-            </div>
+            <section class="glass-panel">
+                <div class="panel-head"><i class="fas fa-dna"></i> AI Diagnostics</div>
+                
+                <div class="stat-box">
+                    <div class="stat-label">Primary Symptom</div>
+                    <div class="stat-val" id="val-symptom">--</div>
+                </div>
 
-            <div class="info-card">
-                <div class="info-title">Risk Assessment</div>
-                <div class="info-val" id="riskDisplay" style="font-size: 1rem;">Pending Scan</div>
-            </div>
-        </section>
-    </main>
+                <div class="stat-box">
+                    <div class="stat-label">Body Temperature (Est.)</div>
+                    <div class="stat-val" id="val-temp">--</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">Urgency Level</div>
+                    <div class="stat-val" id="val-risk">--</div>
+                </div>
+
+                <div style="padding:1rem; text-align:center;">
+                    <i class="fas fa-fingerprint" style="font-size:3rem; color:rgba(255,255,255,0.05);"></i>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <script>
-        // --- 1. CONFIGURATION ---
+        // --- 1. BOOT SEQUENCE LOGIC ---
+        const bootText = [
+            "Initializing NeuroLink Kernel v2.4...",
+            "Loading Modules: [Speech] [Vision] [Gemini-1.5]...",
+            "Decrypting Medical Databases...",
+            "Connecting to Global Health Servers...",
+            "> Connection Established.",
+            "> Biometrics Active.",
+            "Welcome, Administrator."
+        ];
+
+        let lineIndex = 0;
+        const bootContainer = document.getElementById('boot-text');
+
+        function typeWriter() {
+            if (lineIndex < bootText.length) {
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.innerText = bootText[lineIndex];
+                bootContainer.appendChild(line);
+                
+                // Trigger Fade In
+                setTimeout(() => line.style.opacity = 1, 50);
+                
+                lineIndex++;
+                setTimeout(typeWriter, 300); // Speed of typing
+            } else {
+                setTimeout(finishBoot, 800);
+            }
+        }
+
+        function finishBoot() {
+            document.getElementById('boot-layer').classList.add('boot-finish');
+            document.getElementById('app-layer').style.opacity = 1;
+        }
+
+        // Start Boot on Load
+        window.onload = typeWriter;
+
+
+        // --- 2. GEMINI API CONFIGURATION ---
+        // Your Key:
+        const API_KEY = "AIzaSyBC3inpQnxtuKxoWB06Lo-gM_MHj1bY5SM"; 
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
         let isListening = false;
-        let mode = 'patient'; // 'patient' or 'doctor'
+        let mode = 'patient';
         let recognition;
         const synth = window.speechSynthesis;
-        const chatContainer = document.getElementById('chatContainer');
 
-        // --- 2. THE "SMART" DICTIONARY (Simulates Real Translation) ---
-        // This is the "Brain" that replaces the fake hardcoded strings.
-        // It maps English/Hindi Keywords -> Tribal Words.
-        const dictionary = {
-            // Medical Terms
-            "fever": "Ruaa",
-            "hot": "Ruaa",
-            "bukhar": "Ruaa",
-            "pain": "Haso",
-            "dard": "Haso",
-            "stomach": "Lai",
-            "pet": "Lai",
-            "head": "Bohok",
-            "sir": "Bohok",
-            "chest": "Koram",
-            "cold": "Manda",
-            "vomit": "Ulau",
-            
-            // Medicines / Actions
-            "dolo": "Ran (Dolo)", // Keeps the brand name but adds 'Ran' (Medicine)
-            "paracetamol": "Ran",
-            "tablet": "Ran",
-            "medicine": "Ran",
-            "water": "Daah",
-            "drink": "Nui",
-            "take": "Jom", // 'Eat' in Santali
-            "use": "Jom",
-            "karo": "Me", // Do/Imperative
-            "lo": "Hatao", // Take
-            "rest": "Jirau",
-            "sleep": "Giti",
-            "hospital": "Aspatal"
-        };
-
-        // --- 3. SPEECH RECOGNITION SETUP ---
+        // --- 3. SPEECH RECOGNITION ---
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = true;
-            recognition.lang = 'en-IN'; // Works for Hinglish
+            recognition.lang = 'en-IN'; // Works for Hinglish/English mix
 
             recognition.onstart = () => {
                 isListening = true;
-                document.getElementById('micBtn').classList.add('listening');
-                document.getElementById('aiStatus').innerText = "Listening...";
-                document.getElementById('liveText').innerText = "";
+                document.getElementById('mic-btn').style.background = "var(--danger)";
+                document.getElementById('live-text').innerText = "Listening...";
             };
 
             recognition.onend = () => {
                 isListening = false;
-                document.getElementById('micBtn').classList.remove('listening');
-                document.getElementById('aiStatus').innerText = "Processing Translation...";
+                document.getElementById('mic-btn').style.background = "rgba(0, 243, 255, 0.1)";
             };
 
             recognition.onresult = (event) => {
-                let interim = '';
+                let finalTranscript = '';
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        processInput(event.results[i][0].transcript);
+                        finalTranscript = event.results[i][0].transcript;
+                        handleInput(finalTranscript); // Send to Gemini
                     } else {
-                        interim += event.results[i][0].transcript;
-                        document.getElementById('liveText').innerText = interim;
+                        document.getElementById('live-text').innerText = event.results[i][0].transcript;
                     }
                 }
             };
-        } else {
-            alert("Please use Google Chrome for this demo.");
         }
-
-        // --- 4. CORE FUNCTIONS ---
 
         function toggleMic() {
             if (isListening) recognition.stop();
@@ -365,121 +415,126 @@
 
         function setMode(newMode) {
             mode = newMode;
-            document.getElementById('btnPatient').classList.toggle('active', mode === 'patient');
-            document.getElementById('btnDoctor').classList.toggle('active', mode === 'doctor');
-            document.getElementById('aiStatus').innerText = mode === 'patient' ? "Patient Mode: Speak Symptoms" : "Doctor Mode: Prescribe Medicine";
-            
-            // Visual feedback on language detection
-            document.getElementById('langDetect').innerText = mode === 'patient' ? "Santali / Hindi" : "English / Hindi";
+            document.getElementById('btn-patient').classList.toggle('active', mode === 'patient');
+            document.getElementById('btn-doctor').classList.toggle('active', mode === 'doctor');
         }
 
-        // --- 5. THE TRANSLATION LOGIC (The Innovation) ---
-        function processInput(text) {
-            document.getElementById('liveText').innerText = text;
-            const lowerText = text.toLowerCase();
+        // --- 4. THE AI BRAIN (CALLING GEMINI) ---
+        async function handleInput(text) {
+            document.getElementById('live-text').innerText = text;
+            document.getElementById('mic-btn').classList.add('processing'); // Spin animation
             
-            let translatedText = "";
-            let speaker = "";
+            // Construct the Prompt
+            let prompt = "";
             
             if (mode === 'patient') {
-                // Patient Flow (Tribal -> Hindi/English)
-                speaker = "patient";
-                
-                // Simple keyword detection for demo
-                if (lowerText.includes('pain') || lowerText.includes('dard')) {
-                    translatedText = "Mujhe dard ho raha hai (Severe Pain)";
-                    updateVitals("High Pain", "99°F", "Moderate");
-                } 
-                else if (lowerText.includes('fever') || lowerText.includes('bukhar')) {
-                    translatedText = "Mujhe tez bukhar hai (High Fever)";
-                    updateVitals("Fever", "102.4°F", "High Risk");
-                } 
-                else if (lowerText.includes('stomach') || lowerText.includes('pet')) {
-                    translatedText = "Mere pet mein dard hai (Stomach Ache)";
-                    updateVitals("Gastritis", "98.6°F", "Low");
-                }
-                else {
-                    translatedText = "I am not feeling well. (General)";
-                    updateVitals("General", "98.6°F", "Stable");
-                }
-                
-                addMessage(text, translatedText, 'patient');
-                speak(translatedText);
-
+                prompt = `
+                    You are a Medical AI Translator for Tribal India. 
+                    Input Text: "${text}"
+                    
+                    Task:
+                    1. Identify the language (Hindi, English, or any Indian language).
+                    2. Translate it into clear English for the Doctor.
+                    3. Extract medical data (Symptom, Estimated Temp based on context, Urgency Level).
+                    
+                    Return JSON ONLY:
+                    {
+                        "translation": "Translated text here",
+                        "detected_lang": "Language Name",
+                        "symptom": "Main Symptom",
+                        "temp": "98F (or higher if fever mentioned)",
+                        "risk": "Low/Medium/High"
+                    }
+                `;
             } else {
-                // Doctor Flow (English/Hindi -> Tribal)
-                // THIS IS WHERE WE FIX THE "FAKE" TRANSLATION
-                speaker = "doctor";
-                
-                // Break sentence into words and map them
-                let words = lowerText.split(" ");
-                let tribalWords = words.map(word => {
-                    // Check dictionary, if not found, keep original word
-                    return dictionary[word] || word; 
-                });
-                
-                // Reassemble
-                translatedText = tribalWords.join(" ") + " (Santali)";
-                
-                // Add specific suffix for realism if it's a command
-                if (lowerText.includes('use') || lowerText.includes('take')) {
-                    if (!translatedText.includes('me')) translatedText += " me"; // 'me' is a command particle
-                }
-
-                addMessage(text, translatedText, 'doctor');
-                // Simulate Tribal speech (using Hindi voice as proxy)
-                speak(translatedText);
+                prompt = `
+                    You are a Medical AI Translator.
+                    Input Text: "${text}"
+                    
+                    Task:
+                    1. Translate this Doctor's advice into a mix of "Simple Hindi + Santali" (Tribal Dialect style) so a rural patient understands. 
+                    2. Use words like 'Jom' (Eat), 'Ran' (Medicine), 'Haso' (Pain).
+                    
+                    Return JSON ONLY:
+                    {
+                        "translation": "Translated Tribal text here",
+                        "detected_lang": "English/Hindi"
+                    }
+                `;
             }
 
-            document.getElementById('aiStatus').innerText = "Translation Complete";
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                const data = await response.json();
+                const aiText = data.candidates[0].content.parts[0].text;
+                
+                // Parse JSON from Gemini (Cleaning code blocks if present)
+                const cleanJson = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const result = JSON.parse(cleanJson);
+
+                updateUI(text, result);
+
+            } catch (error) {
+                console.error("Gemini Error:", error);
+                alert("AI Connection Failed. Check Console.");
+            }
+            
+            document.getElementById('mic-btn').classList.remove('processing');
         }
 
-        // --- 6. UI UPDATES ---
-
-        function addMessage(original, translated, role) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message msg-${role}`;
+        // --- 5. UPDATING THE UI ---
+        function updateUI(original, data) {
+            const chatBox = document.getElementById('chat-box');
             
-            msgDiv.innerHTML = `
-                <span class="role-label">${role === 'patient' ? 'Patient (Native)' : 'Doctor'}</span>
+            // 1. Create Message Bubble
+            const div = document.createElement('div');
+            div.className = `msg msg-${mode}`;
+            div.innerHTML = `
                 <div class="bubble">
                     ${original}
-                    <span class="translated-text">
-                        <i class="fas fa-language"></i> ${translated}
+                    <span class="translation">
+                        <i class="fas fa-language"></i> ${data.translation}
                     </span>
                 </div>
             `;
+            chatBox.appendChild(div);
             
-            chatContainer.appendChild(msgDiv);
-            
-            // FORCE SCROLL TO BOTTOM (The fix for your "not moving" issue)
-            setTimeout(() => {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 100);
-        }
+            // Scroll to bottom
+            setTimeout(() => chatBox.scrollTop = chatBox.scrollHeight, 100);
 
-        function updateVitals(symptom, temp, risk) {
-            document.getElementById('symptomDisplay').innerText = symptom;
-            document.getElementById('tempDisplay').innerText = temp;
-            
-            const riskEl = document.getElementById('riskDisplay');
-            riskEl.innerText = risk;
-            
-            if (risk.includes("High")) {
-                riskEl.className = "info-val status-danger";
-                // Flash animation for danger
-                document.body.style.boxShadow = "inset 0 0 50px rgba(239,68,68,0.2)";
-            } else {
-                riskEl.className = "info-val status-ok";
-                document.body.style.boxShadow = "none";
+            // Speak the translation
+            speak(data.translation);
+
+            // 2. Update Vitals (Only in Patient Mode)
+            if (mode === 'patient') {
+                document.getElementById('lang-display').innerText = data.detected_lang;
+                document.getElementById('val-symptom').innerText = data.symptom || "--";
+                document.getElementById('val-temp').innerText = data.temp || "--";
+                
+                const riskEl = document.getElementById('val-risk');
+                riskEl.innerText = data.risk || "Evaluating";
+                
+                if (data.risk === 'High' || data.risk === 'Critical') {
+                    riskEl.className = 'stat-val risk-high';
+                } else {
+                    riskEl.className = 'stat-val risk-low';
+                }
             }
         }
 
         function speak(text) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'hi-IN';
-            synth.speak(utterance);
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'hi-IN'; // Hindi accent works best for Tribal/Indian context
+            synth.speak(u);
         }
+
     </script>
 </body>
 </html>
