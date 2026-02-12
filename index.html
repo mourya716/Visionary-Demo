@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroMed AI | Masterpiece Edition</title>
+    <title>NeuroMed AI | Final Demo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        /* --- CORE VISUALS --- */
+        /* --- VISUALS --- */
         :root {
             --bg: #000000;
-            --glass: rgba(10, 10, 15, 0.6);
-            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(20, 20, 30, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
             --primary: #3b82f6;
             --cyan: #06b6d4;
             --aura-grad: linear-gradient(90deg, #60a5fa, #c084fc, #f472b6);
@@ -32,22 +32,23 @@
             flex-direction: column;
         }
 
-        /* --- 1. AURA BOOT SEQUENCE (Your Exact Video) --- */
+        /* --- 1. AURA BOOT SEQUENCE (Fixed Timing) --- */
         #boot-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 99999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
         }
 
         .aura-text {
-            font-size: 5.5rem; font-weight: 800; letter-spacing: 2px;
+            font-size: 6rem; font-weight: 800; letter-spacing: -2px;
             background: var(--aura-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             opacity: 0; transform: scale(0.9);
             animation: textIn 2s ease-out forwards;
         }
 
         .aura-loader {
-            margin-top: 1.5rem; font-family: 'JetBrains Mono'; font-size: 0.75rem; letter-spacing: 4px; color: #666;
+            margin-top: 2rem; font-family: 'JetBrains Mono'; font-size: 0.8rem; letter-spacing: 4px; color: #666;
             opacity: 0; animation: subIn 1s 1s forwards;
         }
 
@@ -64,10 +65,11 @@
             60% { opacity: 0; transform: scale(0); }
             70% { opacity: 1; transform: scale(1); }
             85% { opacity: 1; transform: scale(50); }
-            100% { opacity: 0; transform: scale(400); }
+            100% { opacity: 0; transform: scale(300); }
         }
 
-        .boot-off { opacity: 0; pointer-events: none; transition: opacity 1s; }
+        /* Utility to force hide */
+        .hidden { display: none !important; }
 
         /* --- 2. MAIN APP --- */
         #app-container {
@@ -79,7 +81,7 @@
             padding: 1.5rem 2.5rem; border-bottom: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
         }
-        .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; }
         .logo span { color: var(--cyan); }
 
         .api-badge {
@@ -95,7 +97,7 @@
 
         .panel {
             background: var(--glass); border: 1px solid var(--border); border-radius: 20px;
-            backdrop-filter: blur(15px); display: flex; flex-direction: column; overflow: hidden;
+            backdrop-filter: blur(20px); display: flex; flex-direction: column; overflow: hidden;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
@@ -231,12 +233,20 @@
         const API_KEY = "AIzaSyCiDBaiJhR3Npfr8ztZ2mv918HK62ysEoQ"; 
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
         
-        // --- 2. BOOT ---
+        // --- 2. BOOT LOGIC (FIXED) ---
         window.onload = () => {
+            // Wait 4 seconds for animation, then FORCE remove the boot screen
             setTimeout(() => {
-                document.getElementById('boot-screen').classList.add('boot-off');
-                document.getElementById('app-container').style.opacity = 1;
-            }, 3500);
+                const boot = document.getElementById('boot-screen');
+                boot.style.opacity = '0';
+                
+                // After fade out, remove it from layout entirely so it doesn't block clicks
+                setTimeout(() => {
+                    boot.classList.add('hidden');
+                    document.getElementById('app-container').style.opacity = '1';
+                }, 1000);
+                
+            }, 4000);
         }
 
         // --- 3. SPEECH ---
@@ -249,7 +259,7 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = true;
-            recognition.lang = 'en-IN'; // Essential for Hinglish
+            recognition.lang = 'en-IN'; 
 
             recognition.onstart = () => {
                 isListening = true;
@@ -287,23 +297,22 @@
             document.getElementById('disp-mode').innerText = m === 'patient' ? "Patient (Hindi > English)" : "Doctor (Any > Tribal)";
         }
 
-        // --- 4. THE MASTERPIECE BRAIN ---
+        // --- 4. THE BRAIN ---
         async function handleAI(text) {
             document.getElementById('disp-text').innerText = text;
             
             let prompt = "";
             if (mode === 'patient') {
                 prompt = `You are a medical translator.
-                Input: "${text}" (Likely Hindi/Hinglish).
-                1. Fix phonetic errors (e.g. "Siddharth" -> "Sir Dard/Headache").
+                Input: "${text}" (Hindi/Hinglish).
+                1. Fix phonetic errors (e.g. "Siddharth" -> "Sir Dard").
                 2. Translate to English.
                 3. Extract Symptom, Temp (if mentioned like 'fever' guess 100F+), Risk.
                 Return JSON ONLY: { "translation": "...", "symptom": "...", "temp": "...", "risk": "..." }`;
             } else {
                 prompt = `You are a tribal translator. 
                 Input: "${text}" (Could be Hindi or English).
-                Task: Translate the *meaning* to a mix of Simple Hindi and Santali.
-                If input is time-related (e.g. "Kab se"), translate accurately.
+                Task: Translate the *meaning* to a mix of Simple Hindi and Santali words.
                 Vocabulary: 'Jom' (Eat), 'Ran' (Medicine), 'Nui' (Drink), 'Jirau' (Rest).
                 Return JSON ONLY: { "translation": "..." }`;
             }
@@ -326,7 +335,7 @@
 
                 const data = await response.json();
                 
-                // ROBUST JSON EXTRACTION (The Fix for "Translation Failed")
+                // JSON HUNTER
                 let rawText = data.candidates[0].content.parts[0].text;
                 let jsonStart = rawText.indexOf('{');
                 let jsonEnd = rawText.lastIndexOf('}');
@@ -341,7 +350,7 @@
 
             } catch (error) {
                 console.error(error);
-                // Fallback only on network error, but keeps it professional
+                // Fail gracefully
                 updateUI(text, { 
                     translation: "Translation processing...", 
                     symptom: "Analyzing...", 
