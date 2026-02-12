@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroMed AI | Ultimate Edition</title>
+    <title>NeuroMed AI | AURA Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        /* --- VISUAL CORE --- */
+        /* --- CORE THEME --- */
         :root {
             --bg: #000000;
-            --glass: rgba(20, 20, 25, 0.6);
-            --border: rgba(255, 255, 255, 0.08);
-            --primary: #3b82f6;
+            --glass: rgba(15, 23, 42, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
+            --primary: #3b82f6; 
             --cyan: #06b6d4;
-            --pink: #ec4899;
+            --aura-gradient: linear-gradient(90deg, #60a5fa, #c084fc, #f472b6);
             --text: #ffffff;
-            --muted: #94a3b8;
             --danger: #ef4444;
+            --success: #10b981;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,224 +33,220 @@
             flex-direction: column;
         }
 
-        /* --- 1. THE "AURA" BOOT SEQUENCE (PERFECTED) --- */
+        /* --- 1. AURA BOOT SEQUENCE (EXACT MATCH) --- */
         #boot-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 99999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .aura-title {
-            font-size: 6rem; font-weight: 800; letter-spacing: -3px;
-            /* The Exact Gradient from your video */
-            background: linear-gradient(90deg, #60a5fa, #c084fc, #f472b6);
+        .aura-text {
+            font-size: 6rem; font-weight: 800; letter-spacing: 2px;
+            background: var(--aura-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            opacity: 0; transform: scale(0.9);
-            animation: auraIn 2s ease-out forwards;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
         }
 
-        .aura-loader {
-            margin-top: 1.5rem; font-family: 'JetBrains Mono'; font-size: 0.7rem;
-            letter-spacing: 4px; color: #555; text-transform: uppercase;
-            opacity: 0; animation: loaderIn 1s 1.5s forwards;
+        .aura-sub {
+            margin-top: 1rem; font-family: 'JetBrains Mono'; font-size: 0.7rem;
+            letter-spacing: 4px; color: #888; text-transform: uppercase;
+            opacity: 0; animation: fadeIn 1s 1s forwards;
         }
 
-        /* The Expanding Dot */
-        .singularity {
-            position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%;
-            box-shadow: 0 0 40px white; opacity: 0;
-            animation: bigBang 4s ease-in-out forwards;
+        .singularity-dot {
+            margin-top: 3rem; width: 6px; height: 6px; background: white; border-radius: 50%;
+            opacity: 0; box-shadow: 0 0 20px white;
+            animation: dotAppear 4s ease-in-out forwards;
         }
 
-        @keyframes auraIn { to { opacity: 1; transform: scale(1); } }
-        @keyframes loaderIn { to { opacity: 1; } }
-        @keyframes bigBang {
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes dotAppear {
             0% { opacity: 0; transform: scale(0); }
-            60% { opacity: 0; transform: scale(0); }
-            70% { opacity: 1; transform: scale(1); } /* Dot appears */
-            85% { opacity: 1; transform: scale(50); } /* Explodes */
-            100% { opacity: 0; transform: scale(400); } /* Consumes screen */
+            50% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(300); } /* Transition to App */
         }
 
-        .boot-hide { opacity: 0; pointer-events: none; transition: opacity 1s; }
+        .boot-fade { opacity: 0; pointer-events: none; transition: opacity 1.5s; }
 
-        /* --- 2. MAIN UI (Glassmorphism) --- */
+        /* --- 2. MAIN APP --- */
         #app-layer {
-            opacity: 0; transition: opacity 1.5s ease; height: 100%; display: flex; flex-direction: column;
-            background: radial-gradient(circle at 50% 10%, #0f172a, #000000 90%);
+            opacity: 0; transition: opacity 2s ease; height: 100%; display: flex; flex-direction: column;
+            background: radial-gradient(circle at 50% 10%, #1e1b4b, #000000 90%);
         }
 
         header {
             padding: 1.5rem 2.5rem; border-bottom: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
         }
-        .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; }
-        .brand span { background: linear-gradient(90deg, var(--primary), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand { font-size: 1.4rem; font-weight: 700; color: white; letter-spacing: -0.5px; }
+        .brand span { color: #3b82f6; }
 
-        .api-status {
+        .api-pill {
             font-family: 'JetBrains Mono'; font-size: 0.75rem; color: var(--success);
             background: rgba(16, 185, 129, 0.1); padding: 6px 16px; border-radius: 99px; border: 1px solid rgba(16, 185, 129, 0.2);
             display: flex; align-items: center; gap: 8px;
         }
-        .pulse { width: 6px; height: 6px; background: var(--success); border-radius: 50%; animation: beat 2s infinite; }
-        @keyframes beat { 0% { opacity: 0.5; } 50% { opacity: 1; box-shadow: 0 0 10px var(--success); } 100% { opacity: 0.5; } }
+        .dot-blink { width: 6px; height: 6px; background: var(--success); border-radius: 50%; animation: blink 1.5s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
 
-        /* GRID */
+        /* LAYOUT */
         main {
             flex: 1; display: grid; grid-template-columns: 300px 1fr 320px; gap: 1.5rem; padding: 1.5rem; overflow: hidden;
         }
 
         .panel {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 24px;
-            backdrop-filter: blur(16px); display: flex; flex-direction: column; overflow: hidden;
+            background: var(--glass); border: 1px solid var(--border); border-radius: 20px;
+            backdrop-filter: blur(20px); display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
         .p-head {
             padding: 1.25rem; border-bottom: 1px solid var(--border);
-            font-size: 0.7rem; letter-spacing: 1px; color: var(--muted); font-weight: 600; text-transform: uppercase;
+            font-size: 0.7rem; letter-spacing: 1px; color: #94a3b8; font-weight: 600; text-transform: uppercase;
         }
 
         /* CHAT */
-        .chat-box {
+        .chat-area {
             flex: 1; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;
             scroll-behavior: smooth;
         }
-        .chat-box::-webkit-scrollbar { width: 4px; }
-        .chat-box::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .chat-area::-webkit-scrollbar { width: 4px; }
+        .chat-area::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
-        .msg { max-width: 85%; animation: slideUp 0.4s ease-out; }
-        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .msg { max-width: 85%; animation: msgSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes msgSlide { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
         .bubble {
             padding: 1rem 1.5rem; border-radius: 18px; color: white; line-height: 1.5; font-size: 1rem; position: relative;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        
+
         .msg-patient { align-self: flex-start; }
         .msg-patient .bubble {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(30, 64, 175, 0.2));
-            border: 1px solid rgba(59, 130, 246, 0.3); border-bottom-left-radius: 4px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(30, 64, 175, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3); border-bottom-left-radius: 2px;
         }
 
         .msg-doctor { align-self: flex-end; text-align: right; }
         .msg-doctor .bubble {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(190, 24, 93, 0.2));
-            border: 1px solid rgba(236, 72, 153, 0.3); border-bottom-right-radius: 4px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(190, 24, 93, 0.1));
+            border: 1px solid rgba(236, 72, 153, 0.3); border-bottom-right-radius: 2px;
         }
 
-        .trans-tag {
-            display: block; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);
-            font-family: 'JetBrains Mono'; font-size: 0.85rem; color: var(--cyan);
+        .trans-block {
+            display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);
+            font-family: 'JetBrains Mono'; font-size: 0.85rem; color: #a5f3fc;
         }
 
         /* CONTROLS */
         .controls {
             padding: 1.5rem; border-top: 1px solid var(--border);
-            display: flex; justify-content: center; align-items: center; gap: 20px; background: rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center; gap: 20px; background: rgba(0,0,0,0.4);
         }
         
-        .mic {
-            width: 72px; height: 72px; border-radius: 50%; border: none; background: white; color: black;
-            font-size: 1.6rem; cursor: pointer; transition: 0.2s; box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        .mic-btn {
+            width: 70px; height: 70px; border-radius: 50%; border: none; background: white; color: black;
+            font-size: 1.5rem; cursor: pointer; transition: 0.2s; box-shadow: 0 0 30px rgba(255,255,255,0.1);
         }
-        .mic:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(255,255,255,0.3); }
-        .mic.active { background: var(--danger); color: white; animation: ripple 1.5s infinite; }
-        @keyframes ripple { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); } 100% { box-shadow: 0 0 0 25px rgba(239,68,68,0); } }
+        .mic-btn:hover { transform: scale(1.05); }
+        .mic-btn.active { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 100% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } }
 
-        .switch {
-            background: #111; padding: 4px; border-radius: 50px; border: 1px solid var(--border); display: flex;
+        .toggles {
+            background: #000; padding: 4px; border-radius: 50px; border: 1px solid var(--border); display: flex;
         }
-        .s-btn {
-            padding: 10px 24px; border-radius: 50px; border: none; background: transparent; color: #666; cursor: pointer; transition: 0.3s; font-weight: 500;
+        .btn-mode {
+            padding: 10px 24px; border-radius: 50px; border: none; background: transparent; color: #64748b; cursor: pointer; font-weight: 600; transition: 0.3s;
         }
-        .s-btn.active { background: white; color: black; font-weight: 700; }
+        .btn-mode.active { background: white; color: black; }
 
-        /* RIGHT PANEL */
-        .stat { padding: 1.5rem; border-bottom: 1px solid var(--border); }
-        .stat-l { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 1px; }
-        .stat-v { font-size: 1.8rem; font-family: 'JetBrains Mono'; color: white; }
-        .risk-high { color: var(--danger); text-shadow: 0 0 20px rgba(239,68,68,0.6); animation: flash 2s infinite; }
-        @keyframes flash { 50% { opacity: 0.7; } }
+        /* STATS */
+        .stat-row { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+        .stat-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
+        .stat-val { font-size: 1.8rem; font-family: 'JetBrains Mono'; color: white; }
+        
+        .risk-alert { color: var(--danger); text-shadow: 0 0 15px rgba(239,68,68,0.5); animation: flash 2s infinite; }
+        @keyframes flash { 50% { opacity: 0.5; } }
 
     </style>
 </head>
 <body>
 
     <div id="boot-layer">
-        <div class="aura-title">NeuroMed</div>
-        <div class="aura-loader">LOADING KNOWLEDGE CORE...</div>
-        <div class="singularity"></div>
+        <div class="aura-text">AURA</div>
+        <div class="aura-sub">LOADING KNOWLEDGE CORE...</div>
+        <div class="singularity-dot"></div>
     </div>
 
     <div id="app-layer">
         <header>
             <div class="brand">NeuroMed <span>AI</span></div>
-            <div class="api-status">
-                <div class="pulse"></div> GEMINI LIVE CONNECTED
+            <div class="api-pill">
+                <div class="dot-blink"></div> GEMINI 1.5 LIVE
             </div>
         </header>
 
         <main>
             <section class="panel">
-                <div class="p-head">Live Feed</div>
+                <div class="p-head">Live Input</div>
                 <div style="padding: 1.5rem; flex:1; display:flex; flex-direction:column;">
-                    <div class="stat-l">Active Mode</div>
-                    <div id="mode-text" style="font-size:1.1rem; color:var(--primary); margin-bottom:2rem;">Patient (Hindi > English)</div>
-                    <div class="stat-l">Live Transcript</div>
-                    <div id="live-text" style="font-family:'JetBrains Mono'; color:var(--cyan); line-height:1.6;">Ready...</div>
+                    <div class="stat-label">System Mode</div>
+                    <div id="mode-display" style="font-size:1.1rem; color:#60a5fa; margin-bottom:2rem;">Patient (Hindi > English)</div>
+                    <div class="stat-label">Transcript</div>
+                    <div id="live-text" style="font-family:'JetBrains Mono'; color:#22d3ee; line-height:1.6;">Waiting...</div>
                 </div>
             </section>
 
             <section class="panel">
-                <div class="p-head">Consultation Stream</div>
-                <div class="chat-box" id="chat-stream">
+                <div class="p-head">Consultation Log</div>
+                <div class="chat-area" id="chat-box">
                     <div class="msg msg-doctor">
-                        <div class="bubble">System Online. I am listening.</div>
+                        <div class="bubble">System Online. Ready.</div>
                     </div>
                 </div>
                 <div class="controls">
-                    <div class="switch">
-                        <button class="s-btn active" id="b-pat" onclick="setMode('patient')">Patient</button>
-                        <button class="s-btn" id="b-doc" onclick="setMode('doctor')">Doctor</button>
+                    <div class="toggles">
+                        <button class="btn-mode active" id="btn-pat" onclick="setMode('patient')">Patient</button>
+                        <button class="btn-mode" id="btn-doc" onclick="setMode('doctor')">Doctor</button>
                     </div>
-                    <button class="mic" id="mic-btn" onclick="toggleMic()"><i class="fas fa-microphone"></i></button>
+                    <button class="mic-btn" id="mic-trigger" onclick="toggleMic()"><i class="fas fa-microphone"></i></button>
                 </div>
             </section>
 
             <section class="panel">
-                <div class="p-head">Real-Time Diagnostics</div>
-                <div class="stat">
-                    <div class="stat-l">Symptom</div>
-                    <div class="stat-v" id="s-sym">--</div>
+                <div class="p-head">AI Diagnostics</div>
+                <div class="stat-row">
+                    <div class="stat-label">Symptom</div>
+                    <div class="stat-val" id="out-symptom">--</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-l">Body Temp (Est.)</div>
-                    <div class="stat-v" id="s-temp">--</div>
+                <div class="stat-row">
+                    <div class="stat-label">Body Temp (Est.)</div>
+                    <div class="stat-val" id="out-temp">--</div>
                 </div>
-                <div class="stat" style="border:none;">
-                    <div class="stat-l">Urgency Level</div>
-                    <div class="stat-v" id="s-risk">--</div>
+                <div class="stat-row" style="border:none;">
+                    <div class="stat-label">Urgency</div>
+                    <div class="stat-val" id="out-risk">--</div>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        // --- 1. CONFIGURATION (NEW KEY APPLIED) ---
-        // I have added a secondary Key Rotation Logic if one fails, but sticking to your new one primarily.
+        // --- 1. CONFIGURATION (NEW KEY) ---
         const API_KEY = "AIzaSyCiDBaiJhR3Npfr8ztZ2mv918HK62ysEoQ"; 
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
         
-        // --- 2. BOOT SEQUENCE ---
+        // --- 2. BOOT LOGIC ---
         window.onload = () => {
-            // Matches your video timing: 4 seconds total
             setTimeout(() => {
-                document.getElementById('boot-layer').classList.add('boot-hide');
+                document.getElementById('boot-layer').classList.add('boot-fade');
                 document.getElementById('app-layer').style.opacity = 1;
-            }, 3800);
+            }, 3800); // Matches video timing
         }
 
-        // --- 3. SPEECH RECOGNITION ---
+        // --- 3. SPEECH SETUP ---
         let recognition;
         let isListening = false;
         let mode = 'patient';
@@ -260,17 +256,17 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = true;
-            recognition.lang = 'en-IN'; // Essential for Hinglish
+            recognition.lang = 'en-IN'; // Critical for Hinglish support
 
             recognition.onstart = () => {
                 isListening = true;
-                document.getElementById('mic-btn').classList.add('active');
+                document.getElementById('mic-trigger').classList.add('active');
                 document.getElementById('live-text').innerText = "Listening...";
             };
 
             recognition.onend = () => {
                 isListening = false;
-                document.getElementById('mic-btn').classList.remove('active');
+                document.getElementById('mic-trigger').classList.remove('active');
             };
 
             recognition.onresult = (event) => {
@@ -278,7 +274,7 @@
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
                         finalT = event.results[i][0].transcript;
-                        processInput(finalT);
+                        processAI(finalT);
                     } else {
                         document.getElementById('live-text').innerText = event.results[i][0].transcript;
                     }
@@ -293,80 +289,71 @@
 
         function setMode(m) {
             mode = m;
-            document.getElementById('b-pat').classList.toggle('active', mode === 'patient');
-            document.getElementById('b-doc').classList.toggle('active', mode === 'doctor');
-            document.getElementById('mode-text').innerText = mode === 'patient' ? "Patient (Hindi > English)" : "Doctor (English > Tribal)";
+            document.getElementById('btn-pat').classList.toggle('active', mode === 'patient');
+            document.getElementById('btn-doc').classList.toggle('active', mode === 'doctor');
+            document.getElementById('mode-display').innerText = mode === 'patient' ? "Patient (Hindi > English)" : "Doctor (English/Hindi > Tribal)";
         }
 
-        // --- 4. THE BRAIN (API + SMART FALLBACK) ---
-        async function processInput(text) {
+        // --- 4. THE REAL GEMINI BRAIN (NO FAKE FALLBACKS) ---
+        async function processAI(text) {
             document.getElementById('live-text').innerText = text;
             
-            try {
-                // Try API First
-                const aiResult = await callGemini(text);
-                updateUI(text, aiResult);
-            } catch (e) {
-                console.warn("API Glitch, switching to Neural Fallback to save demo...");
-                // If API fails, use the "Smart Local Brain"
-                const localResult = smartFallback(text);
-                updateUI(text, localResult);
-            }
-        }
-
-        async function callGemini(text) {
+            // PROMPT ENGINEERING
             let prompt = "";
             if (mode === 'patient') {
                 prompt = `You are a medical AI. Input: "${text}".
-                1. Fix phonetic errors (e.g. "Siddharth" -> "Sir Dard/Headache").
-                2. Translate to English.
-                3. Extract Symptom, Temp (guess if fever mentioned), Risk (High/Low).
-                Return JSON ONLY: { "translation": "...", "symptom": "...", "temp": "...", "risk": "..." }`;
+                Task: Translate this (Hindi/English/Broken) into professional English for a doctor.
+                Extract: Symptom, Est Temp (guess if fever mentioned), Risk (High/Low).
+                Return JSON: { "translation": "...", "symptom": "...", "temp": "...", "risk": "..." }`;
             } else {
-                prompt = `Translate to Tribal Santali/Hindi mix: "${text}".
-                Use words: 'Jom' (Eat), 'Ran' (Medicine), 'Jirau' (Rest), 'Nui' (Drink).
-                Return JSON ONLY: { "translation": "..." }`;
+                // DOCTOR MODE FIXED: Handles Hindi Input correctly
+                prompt = `You are a medical translator for tribal areas. 
+                Input Text: "${text}" (This could be English OR Hindi).
+                Task: Translate the meaning into a mix of Simple Hindi and Santali words.
+                Keywords to use if applicable: 'Jom' (Eat), 'Ran' (Medicine), 'Nui' (Drink), 'Jirau' (Rest).
+                Example: "Kab se pukar rahi hai" -> "Tin ghari khon em hohoyeda? (How long calling?)"
+                Return JSON: { "translation": "..." }`;
             }
 
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-            });
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: prompt }] }],
+                        safetySettings: [{ category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }] 
+                    })
+                });
 
-            const data = await response.json();
-            const raw = data.candidates[0].content.parts[0].text;
-            const json = raw.replace(/```json/g, '').replace(/```/g, '').trim();
-            return JSON.parse(json);
-        }
+                if (!response.ok) throw new Error("API Error");
 
-        // --- 5. SMART FALLBACK (The "Realness" Saver) ---
-        // This runs if the Internet fails, ensuring the demo NEVER breaks.
-        function smartFallback(text) {
-            const t = text.toLowerCase();
-            if (mode === 'patient') {
-                if (t.includes('pain') || t.includes('dard') || t.includes('pairon')) 
-                    return { translation: "I have severe pain in my body.", symptom: "Acute Pain", temp: "99°F", risk: "Medium" };
-                if (t.includes('fever') || t.includes('hot') || t.includes('bukhar')) 
-                    return { translation: "I am suffering from high fever.", symptom: "Viral Fever", temp: "103°F", risk: "High" };
-                return { translation: "I am not feeling well.", symptom: "General Malaise", temp: "98.6°F", risk: "Low" };
-            } else {
-                if (t.includes('dolo') || t.includes('medicine')) return { translation: "Ran (Dolo) jom me." };
-                if (t.includes('water')) return { translation: "Lolo daah nui me." };
-                return { translation: "Jirau me (Rest well)." };
+                const data = await response.json();
+                const raw = data.candidates[0].content.parts[0].text;
+                const json = raw.replace(/```json/g, '').replace(/```/g, '').trim();
+                const result = JSON.parse(json);
+
+                updateUI(text, result);
+
+            } catch (e) {
+                console.error(e);
+                // GENERIC RETRY (Does not give fake advice)
+                updateUI(text, { 
+                    translation: "Translation failed. Please speak clearly.", 
+                    symptom: "--", temp: "--", risk: "--" 
+                });
             }
         }
 
-        // --- 6. UI UPDATE ---
+        // --- 5. UI UPDATES ---
         function updateUI(original, data) {
-            const chatBox = document.getElementById('chat-stream');
+            const chatBox = document.getElementById('chat-box');
             
             const div = document.createElement('div');
             div.className = `msg msg-${mode}`;
             div.innerHTML = `
                 <div class="bubble">
                     ${original}
-                    <span class="trans-tag">
+                    <span class="trans-block">
                         <i class="fas fa-language"></i> ${data.translation}
                     </span>
                 </div>
@@ -376,17 +363,17 @@
 
             // TTS
             const u = new SpeechSynthesisUtterance(data.translation);
-            u.lang = 'hi-IN'; 
+            u.lang = 'hi-IN';
             synth.speak(u);
 
-            // Update Stats
+            // Update Stats (Patient Only)
             if (mode === 'patient') {
-                document.getElementById('s-sym').innerText = data.symptom || "--";
-                document.getElementById('s-temp').innerText = data.temp || "--";
+                document.getElementById('out-symptom').innerText = data.symptom || "--";
+                document.getElementById('out-temp').innerText = data.temp || "--";
                 
-                const r = document.getElementById('s-risk');
+                const r = document.getElementById('out-risk');
                 r.innerText = data.risk || "--";
-                r.className = (data.risk === 'High') ? 'stat-v risk-high' : 'stat-v';
+                r.className = (data.risk === 'High') ? 'stat-val risk-alert' : 'stat-val';
             }
         }
     </script>
